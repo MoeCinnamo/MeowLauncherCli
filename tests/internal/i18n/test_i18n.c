@@ -164,5 +164,33 @@ int main(void)
     CHECK(strcmp(I18n("help.totally_absent"), "[help.totally_absent]") == 0,
           "zh miss recurses to en fallback then placeholder");
 
+    /* --- find_value: multi-char value drives the scan loop (line 105) --- */
+    {
+        const char *obj = "{\"a\":\"hello world\"}";
+        size_t len;
+        const char *v = find_value(obj, obj + strlen(obj), "a", &len);
+        CHECK(v != NULL && len == 11 && strncmp(v, "hello world", 11) == 0,
+              "find_value multi-char value scanned to closing quote");
+    }
+
+    /* --- I18n line 160: active == fallback, no recursion --- */
+    set_lang("C");
+    I18n_Init();
+    CHECK(active_json == fallback_json, "en build: active == fallback");
+    /* Missing key on en: fallback branch is skipped, placeholder returns. */
+    CHECK(strcmp(I18n("help.nope"), "[help.nope]") == 0,
+          "en missing key returns placeholder without recursion");
+
+    /* --- I18n line 160: active != fallback but key exists locally --- */
+    /* On zh, ask for a key zh actually has: the condition is true but the
+     * local lookup succeeds, so the fallback branch is not entered. */
+    set_lang("zh_TW.UTF-8");
+    I18n_Init();
+    CHECK(active_json != fallback_json, "zh build: active != fallback");
+    CHECK(strstr(I18n("help.usage"), "使用") != NULL ||
+          strstr(I18n("help.usage"), "用法") != NULL ||
+          strstr(I18n("help.usage"), "指令") != NULL,
+          "zh key resolved locally, no fallback needed");
+
     return failures ? 1 : 0;
 }
