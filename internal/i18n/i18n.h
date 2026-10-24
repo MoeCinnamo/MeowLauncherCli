@@ -1,5 +1,5 @@
-#ifndef MEOW_I18N_I18N_H
-#define MEOW_I18N_I18N_H
+#ifndef I18N_H
+#define I18N_H
 
 /*
  * Initialize localization.
@@ -21,4 +21,4 @@ void I18n_Init(void);
  */
 const char *I18n(const char *path);
 
-#endif /* MEOW_I18N_I18N_H */
+#endif /* I18N_H */

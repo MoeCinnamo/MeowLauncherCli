@@ -12,7 +12,7 @@
 
 void Help_Print(void)
 {
-    printf("MeowLauncherCli — %s\n\n", I18n("help.tagline"));
+    printf("MeowLauncherCli - %s\n\n", I18n("help.tagline"));
     printf("%s\n\n", I18n("help.usage"));
     printf("%s\n", I18n("help.commands_header"));
     printf("  %-10s %s\n", "help",     I18n("help.cmd_help"));

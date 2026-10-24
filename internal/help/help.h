@@ -1,5 +1,5 @@
-#ifndef MEOW_HELP_HELP_H
-#define MEOW_HELP_HELP_H
+#ifndef HELP_H
+#define HELP_H
 
 /*
  * Print the top-level help (usage and command list) to stdout.
@@ -9,4 +9,4 @@
  */
 void Help_Print(void);
 
-#endif /* MEOW_HELP_HELP_H */
+#endif /* HELP_H */

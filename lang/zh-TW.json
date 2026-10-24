@@ -16,13 +16,18 @@
     "cmd_world": "管理世界（目前遊戲版本）",
     "cmd_resource": "管理資源包（目前遊戲版本）",
     "cmd_config": "設定",
-    "see_help": "執行 'meowlaunchcli <command> --help' 檢視更多說明。"
+    "see_help": "執行 'meowlaunchcli <command> help' 檢視更多說明。"
   },
   "error": {
     "unknown_command": "未知指令：%s"
   },
   "account": {
     "usage": "用法：meowlaunchcli account local <add|del> <使用者名稱>",
+    "help": {
+      "title": "帳號管理：",
+      "local_add": "account local add <使用者>   新增本機離線帳號",
+      "local_del": "account local del <使用者>   移除本機離線帳號"
+    },
     "added": "已新增本機帳號：%s",
     "removed": "已移除本機帳號：%s",
     "exists": "帳號已存在",

@@ -10,6 +10,11 @@
 #include <string.h>
 
 #include "internal/i18n/i18n.c"
+#include "internal/json/json_walk.c"
+
+/* i18n used to have its own walkers; now it delegates to Json_*. */
+#define find_object Json_FindObject
+#define find_value  Json_FindValue
 
 static int failures = 0;
 
@@ -56,12 +61,14 @@ int main(void)
     CHECK(strcmp(I18n("help.nope"), "[help.nope]") == 0,
           "missing key placeholder");
 
-    /* --- skip_ws: eats every whitespace kind --- */
-    {
-        const char *s = "  \t\n\r x";
-        CHECK(*skip_ws(s) == 'x', "skip_ws eats spaces/tabs/newlines/CR");
-        CHECK(*skip_ws("x") == 'x', "skip_ws on non-whitespace");
-    }
+    /* Nested lookup: error.unknown_command. */
+    set_lang("C");
+    I18n_Init();
+    CHECK(strncmp(I18n("error.unknown_command"), "Unknown command", 15) == 0,
+          "error.unknown_command resolves");
+
+    /* --- skip_ws covered in json_walk unit tests --- */
+    (void)0;
 
     /* --- find_object: section hits / missing --- */
     {

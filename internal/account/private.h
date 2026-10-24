@@ -1,5 +1,5 @@
-#ifndef MEOW_ACCOUNT_PRIVATE_H
-#define MEOW_ACCOUNT_PRIVATE_H
+#ifndef ACCOUNT_PRIVATE_H
+#define ACCOUNT_PRIVATE_H
 
 /* Internal cross-TU declarations for the account module. Not for use
  * outside internal/account/. */

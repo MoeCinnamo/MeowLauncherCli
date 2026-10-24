@@ -12,6 +12,8 @@
 #include "internal/account/account.c"
 #include "internal/account/uuid.c"
 #include "internal/account/usersfile.c"
+#include "internal/json/json_io.c"
+#include "internal/json/json_walk.c"
 
 /* i18n stub: tests care about storage behaviour, not translations. */
 const char *I18n(const char *key)

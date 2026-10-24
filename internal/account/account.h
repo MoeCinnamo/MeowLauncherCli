@@ -1,5 +1,5 @@
-#ifndef MEOW_ACCOUNT_H
-#define MEOW_ACCOUNT_H
+#ifndef ACCOUNT_H
+#define ACCOUNT_H
 
 /*
  * Local offline accounts. Persisted to ~/.meowlaunch/data/users.json.

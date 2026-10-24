@@ -16,13 +16,18 @@
     "cmd_world": "ワールドを管理（現在のゲームバージョン）",
     "cmd_resource": "リソースパックを管理（現在のゲームバージョン）",
     "cmd_config": "設定を表示・変更",
-    "see_help": "'meowlaunchcli <command> --help' で詳細を表示。"
+    "see_help": "'meowlaunchcli <command> help' で詳細を表示。"
   },
   "error": {
     "unknown_command": "不明なコマンド: %s"
   },
   "account": {
     "usage": "使い方: meowlaunchcli account local <add|del> <ユーザー名>",
+    "help": {
+      "title": "アカウント管理:",
+      "local_add": "account local add <ユーザー>   ローカルアカウントを追加",
+      "local_del": "account local del <ユーザー>   ローカルアカウントを削除"
+    },
     "added": "ローカルアカウントを追加しました: %s",
     "removed": "ローカルアカウントを削除しました: %s",
     "exists": "アカウントは既に存在します",

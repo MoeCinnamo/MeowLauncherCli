@@ -107,34 +107,30 @@ mapfile -t SOURCES < <(find . -name '*.c' -not -path './.git/*' -not -path './te
 echo "[INFO] Platform=$uname_s CC=$CC GIT_VERSION=$GIT_VERSION LANGS='${LANGS:-en zh-TW ja-JP}'"
 echo "[INFO] Sources: ${SOURCES[*]}"
 
-# Output directory: coverage builds keep every artifact (objects, .gcno/.gcda,
-# binary) in build_test/; normal builds go to build/.
+# Output directory: build/ always holds the product binary. Coverage flags
+# are added when COVERAGE=1 but the binary still lands in build/.
+out_dir="$PROJECT_ROOT/build"
 if [ "${COVERAGE:-0}" = "1" ]; then
-    out_dir="$PROJECT_ROOT/build_test"
     CFLAGS="$CFLAGS --coverage"
-else
-    out_dir="$PROJECT_ROOT/build"
 fi
 mkdir -p "$out_dir"
 out_bin="$out_dir/meowlaunchcli${bin_suffix}"
 
-if [ "${COVERAGE:-0}" = "1" ]; then
-    # Compile separate objects so .gcno/.gcda land in build_test/.
-    objs=()
-    idx=0
-    for src in "${SOURCES[@]}"; do
-        obj="$out_dir/obj_${idx}.o"
-        # shellcheck disable=SC2086
-        "$CC" $CFLAGS -DGIT_VERSION="\"$GIT_VERSION\"" \
-            -c "$src" -o "$obj"
-        objs+=("$obj")
-        idx=$((idx + 1))
-    done
-    "$CC" --coverage "${objs[@]}" -o "$out_bin" $LDFLAGS
-else
-    # shellcheck disable=SC2086
-    "$CC" $CFLAGS -DGIT_VERSION="\"$GIT_VERSION\"" \
-        "${SOURCES[@]}" -o "$out_bin" $LDFLAGS
-fi
+# Compile each translation unit to an object in parallel, then link.
+# Everything lands in build/ — build.sh must never touch build_test/.
+obj_dir="$PROJECT_ROOT/build/obj"
+mkdir -p "$obj_dir"
+objs=()
+for src in "${SOURCES[@]}"; do
+    obj="$obj_dir/$(echo "$src" | sed 's|/|_|g;s|\.c$|.o|')"
+    objs+=("$obj")
+done
+njobs="$(nproc 2>/dev/null || echo 4)"
+# shellcheck disable=SC2086
+printf '%s\n' "${SOURCES[@]}" | CC="$CC" CFLAGS="$CFLAGS" GIT_VERSION="$GIT_VERSION" obj_dir="$obj_dir" \
+    xargs -P "$njobs" -I{} sh -c \
+    '"$CC" $CFLAGS -DGIT_VERSION="\"$GIT_VERSION\"" -c "$1" -o "$obj_dir/$(echo "$1" | sed "s|/|_|g;s|\.c$|.o|")"' _ {}
+# shellcheck disable=SC2086
+"$CC" $CFLAGS "${objs[@]}" -o "$out_bin" $LDFLAGS
 
 echo "[INFO] Build OK: $out_bin"

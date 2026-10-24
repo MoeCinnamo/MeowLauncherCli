@@ -2,6 +2,21 @@
 
 Newest record on top.
 
+## 2026-10-24 internal/json split, build isolation, account help
+
+- **Reason**: Multiple modules need JSON IO + flat-object walker; build
+  artifacts and unit-test artifacts must not share a directory; `account`
+  needed its own help subcommand.
+- **Decisions**:
+  - `internal/json/` split into `json_io.c` (Json_Load/Save, recursive
+    mkdir) and `json_walk.c` (Json_FindObject/FindValue, `skip_ws` static).
+    Keys matched as `"key"`.
+  - `build/` holds the product binary only; `build_test/` holds unit-test
+    binaries, junit.xml, coverage artifacts.
+  - `account help` prints the new `account.help` i18n key (en/zh-TW/ja-JP).
+  - Independent build/test steps are parallelized where possible.
+- **Trade-off**: Walker remains minimal (flat objects, quoted strings).
+
 ## 2026-10-24 Account module hardening: Windows mkdir, NUL-gap fix
 
 - **Reason**: On Windows/MSYS the old `system("mkdir -p ...")` shell

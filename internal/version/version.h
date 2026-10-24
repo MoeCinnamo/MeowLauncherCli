@@ -1,5 +1,5 @@
-#ifndef MEOW_VERSION_VERSION_H
-#define MEOW_VERSION_VERSION_H
+#ifndef VERSION_H
+#define VERSION_H
 
 /*
  * Print the current MeowLauncherCli version to stdout.
@@ -8,4 +8,4 @@
  */
 void Version_Print(void);
 
-#endif /* MEOW_VERSION_VERSION_H */
+#endif /* VERSION_H */

@@ -10,6 +10,7 @@
 #include <string.h>
 
 #include "internal/account/account.h"
+#include "internal/account/help.h"
 #include "internal/help/help.h"
 #include "internal/i18n/i18n.h"
 #include "internal/version/version.h"
@@ -36,6 +37,10 @@ int main(int argc, char **argv)
             if (strcmp(argv[3], "del") == 0) {
                 return Account_Local_Del(argv[4]);
             }
+        }
+        if (argc >= 3 && strcmp(argv[2], "help") == 0) {
+            Account_Help();
+            return 0;
         }
         fprintf(stderr, "%s\n", I18n("account.usage"));
         return 1;
