@@ -65,6 +65,14 @@ int main(void)
         CHECK(v != NULL && len == 1 && v[0] == 'v', "FindValue skips ws");
     }
 
+    /* skip_ws loop body: whitespace between key and colon. */
+    {
+        const char *j = "{\"k\"  \t\n : \"v\"}";
+        size_t len;
+        const char *v = Json_FindValue(j, j + strlen(j), "k", &len);
+        CHECK(v != NULL && len == 1 && v[0] == 'v', "FindValue ws before colon");
+    }
+
     /* Key too long -> NULL. */
     {
         const char *j = "{\"x\":\"y\"}";

@@ -53,5 +53,14 @@ int main(void)
     CHECK(Account_Local_Del("") != 0, "del empty name fails");
     CHECK(Account_Local_Del(NULL) != 0, "del NULL name fails");
 
+    /* Home unset: usersfile_path fails. */
+#ifdef _WIN32
+    putenv("USERPROFILE=");
+#else
+    unsetenv("HOME");
+#endif
+    CHECK(Account_Local_Add("x") != 0, "add with no home fails");
+    CHECK(Account_Local_Del("x") != 0, "del with no home fails");
+
     return failures ? 1 : 0;
 }

@@ -67,6 +67,10 @@ int main(void)
     CHECK(strncmp(I18n("error.unknown_command"), "Unknown command", 15) == 0,
           "error.unknown_command resolves");
 
+    /* Mid-walk miss: error.nope.x — error exists, nope does not. */
+    CHECK(strcmp(I18n("error.nope.x"), "[error.nope.x]") == 0,
+          "nested mid-walk miss -> placeholder");
+
     /* --- skip_ws covered in json_walk unit tests --- */
     (void)0;
 

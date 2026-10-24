@@ -10,6 +10,22 @@
 #include "internal/json/json_io.c"
 #include "internal/json/json_walk.c"
 
+static int malloc_fail_at = -1;
+static int malloc_calls = 0;
+
+/* Linker wraps: --wrap,malloc routes malloc -> __wrap_malloc. */
+void *__real_malloc(size_t);
+void __real_free(void *);
+void *__wrap_malloc(size_t n)
+{
+    malloc_calls++;
+    if (malloc_fail_at >= 0 && malloc_calls > malloc_fail_at) {
+        return NULL;
+    }
+    return __real_malloc(n);
+}
+void __wrap_free(void *p) { __real_free(p); }
+
 static int failures = 0;
 #define CHECK(cond, name) do { \
     if (cond) printf("[PASS] %s\n", name); \
@@ -86,6 +102,16 @@ int main(void)
         char *r = usersfile_load("build_test/usersfile_test.json");
         CHECK(r != NULL && strstr(r, "users") != NULL, "usersfile_save load back");
         free(r);
+    }
+
+    /* malloc failure during insert: inject failure so nb=malloc returns NULL. */
+    {
+        char *buf = strdup("{\"users\":[]}");
+        malloc_calls = 0;
+        malloc_fail_at = 0; /* first malloc in insert (nb) fails */
+        CHECK(usersfile_insert(&buf, "x", "y") == -1, "insert malloc fail -> -1");
+        free(buf);
+        malloc_fail_at = -1;
     }
 
     return failures ? 1 : 0;

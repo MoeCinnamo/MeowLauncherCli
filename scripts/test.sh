@@ -159,10 +159,12 @@ LANG=zh_TW.UTF-8 "$BIN" | grep -q "Usage: meowlaunchcli" \
 # 10. Unit tests: rebuild default all-languages binary back into test_dir.
 echo "[INFO] Unit tests..."
 rebuild ""
-# Exercise the final coverage binary once: the gcda we just deleted belongs
-# to this build, and gcovr needs it before generating the report.
+# Exercise the final coverage binary once so gcda matches this build.
 "$BIN" help >/dev/null
 "$BIN" version >/dev/null
+"$BIN" account help >/dev/null
+"$BIN" account local add covuser >/dev/null
+"$BIN" account local del covuser >/dev/null
 # Unit-test compiler: prefer gcc (present on Alpine, MinGW, Ubuntu).
 if [ -z "${CC:-}" ]; then
     if command -v gcc >/dev/null 2>&1; then CC="gcc"; else CC="cc"; fi
@@ -176,8 +178,14 @@ for test_src in $(find tests -name 'test_*.c'); do
     unit_bin="$test_dir/test_$(echo "$mod" | tr '/' '_')${bin_suffix}"
     # Each test .c includes the source under test directly (or is a black-box
     # main), so no separate module link step is needed.
+    # Per-test extra link flags: usersfile test wraps malloc to inject failure.
+    extra_ld=""
+    case "$test_src" in
+        *test_usersfile.c) extra_ld="-Wl,--wrap,malloc -Wl,--wrap,free" ;;
+        *test_json_io.c) extra_ld="-Wl,--wrap,malloc" ;;
+    esac
     # shellcheck disable=SC2086
-    if ! "$CC" $CFLAGS "$test_src" -o "$unit_bin"; then
+    if ! "$CC" $CFLAGS "$test_src" -o "$unit_bin" $extra_ld; then
         echo "[FAIL] build unit test $mod"
         results+=("FAIL|unit test $mod")
         status=1

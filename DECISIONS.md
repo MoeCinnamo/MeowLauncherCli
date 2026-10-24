@@ -2,6 +2,26 @@
 
 Newest record on top.
 
+## 2026-10-24 Account error-path coverage
+
+- **Reason**: `Account_Local_Add/Del` error branches (unset HOME, NULL load,
+  save failure) were uncovered; cmd account subcommands needed fresh gcda after
+  the final rebuild; i18n mid-walk miss and fallback branches uncovered.
+- **Decisions**:
+  - test_account unsets HOME and asserts add/del fail, covering the
+    `usersfile_path` error return.
+  - test.sh exercises `account help`/`local add`/`local del` after the final
+    coverage rebuild so gcda matches.
+  - test_usersfile links with `-Wl,--wrap,malloc,free` and injects a NULL
+    allocation to cover the insert-malloc-fail branch.
+  - test_i18n adds `error.nope.x` (mid-walk miss) to cover the `body==NULL`
+    break and fallback recursion.
+  - test_json_io wraps `malloc` and tests unwritable save path, covering
+    `out==NULL` and `buf==NULL` branches.
+- **Trade-off**: fread-short branch not directly triggered (needs a truncated
+  file after stat; POSIX-only `ftruncate` unavailable on MinGW); left
+  uncovered.
+
 ## 2026-10-24 Per-source test split and edge-branch coverage
 
 - **Reason**: Unit tests were monolithic; codecov/patch still flagged uncovered

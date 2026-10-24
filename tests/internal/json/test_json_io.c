@@ -8,6 +8,16 @@
 
 #include "internal/json/json_io.c"
 
+static int malloc_fail_at = -1;
+static int malloc_calls = 0;
+void *__real_malloc(size_t);
+void *__wrap_malloc(size_t n)
+{
+    malloc_calls++;
+    if (malloc_fail_at >= 0 && malloc_calls > malloc_fail_at) return NULL;
+    return __real_malloc(n);
+}
+
 static int failures = 0;
 #define CHECK(cond, name) do { \
     if (cond) printf("[PASS] %s\n", name); \
@@ -29,6 +39,17 @@ int main(void)
               "Json_Load reads saved file");
         free(loaded);
     }
+
+    /* Json_Save to an unwritable path: fopen fails -> -1. */
+    CHECK(Json_Save("build_test/json_io_tmp/sub/dir/data.json/inside", "x") != 0,
+          "Json_Save unwritable -> -1");
+
+    /* malloc failure in Json_Load: buf=NULL path. */
+    malloc_calls = 0;
+    malloc_fail_at = 0;
+    CHECK(Json_Load("build_test/json_io_tmp/sub/dir/data.json") == NULL,
+          "Json_Load malloc fail -> NULL");
+    malloc_fail_at = -1;
 
     return failures ? 1 : 0;
 }
