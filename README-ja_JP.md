@@ -35,7 +35,7 @@ meowlaunchcli <command>  # サブコマンドを実行
 | `game`      | ゲームバージョンを管理・切り替え |
 | `launch`    | ゲームを起動 |
 | `mod`       | mod を管理（現在のゲームバージョン） |
-| `account`   | アカウントを管理 |
+| `account`   | アカウントを管理（`account local add/del <ユーザー>`） |
 | `world`     | ワールドを管理（現在のゲームバージョン） |
 | `resource`   | リソースパックを管理（現在のゲームバージョン） |
 | `config`    | 設定を表示・変更 |
@@ -61,7 +61,17 @@ Windows (MSYS2/MinGW) では同じスクリプトが `gcc` を使い `meowlaunch
 
 ## 現況
 
-開発初期段階です。`help` と `version` は実装済み、残りのコマンドはモジュール単位で順次実装されます。
+開発初期段階です。`help`、`version`、`account local add/del` は実装済み、残りのコマンドはモジュール単位で順次実装されます。
+
+## ドキュメント
+
+- [English](docs/en/index.md)
+- [繁體中文](docs/zh-TW/index.md)
+- [日本語](docs/ja-JP/index.md)
+
+## セキュリティ
+
+[SECURITY.md](SECURITY.md) を参照してください。
 
 ## ライセンス
 

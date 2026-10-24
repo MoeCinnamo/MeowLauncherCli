@@ -2,6 +2,25 @@
 
 Newest record on top.
 
+## 2026-10-24 Local accounts, split modules, visibility hardening
+
+- **Reason**: Need `account local add/del` with on-disk persistence; logic
+  was monolithic; and previously-exported helpers weren't used outside the
+  module.
+- **Decisions**:
+  - `internal/account/` contains:
+    - `account.c/.h` — only `Account_Local_Add/Del` is exported (called
+      from `cmd/meowlaunchcli/main.c`).
+    - `uuid.c` — `uuid_generate()` random 8-4-4-4-12.
+    - `usersfile.c` — `usersfile_path/load/save/insert/remove`; storage at
+      `~/.meowlaunch/data/users.json` (`USERPROFILE` on Windows).
+    - `private.h` — lowercase cross-TU declarations within the module.
+    - True exports capitalized; module-internal functions lowercase.
+  - i18n reads the embedded `builtin_langs[]` table; no runtime file lookup.
+  - Docs: `docs/{en,zh-TW,ja-JP}/index.md` + `account.md`.
+  - Unit tests redirect `HOME` to a scratch dir.
+- **Trade-off**: Hand-rolled JSON is safe only for our own writer's output.
+
 ## 2026-10-24 Fix find_value range-exhausted unit test
 
 - **Reason**: The first test for the outer-loop `return NULL` (line 111)

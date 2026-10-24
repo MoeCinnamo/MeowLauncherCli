@@ -35,7 +35,7 @@ meowlaunchcli <command>  # 執行子指令
 | `game`     | 管理和切換遊戲版本 |
 | `launch`   | 啟動遊戲版本 |
 | `mod`      | 管理模組（目前遊戲版本） |
-| `account`  | 管理帳號 |
+| `account`  | 管理帳號（`account local add/del <使用者>`） |
 | `world`    | 管理世界（目前遊戲版本） |
 | `resource` | 管理資源包（目前遊戲版本） |
 | `config`   | 設定 |
@@ -61,7 +61,17 @@ Windows（MSYS2/MinGW）下同一支腳本使用 `gcc`，產出 `meowlaunchcli.e
 
 ## 現況
 
-開發初期。`help` 與 `version` 已實作，其餘指令正以模組為單位逐步落地。
+開發初期。`help`、`version` 與 `account local add/del` 已實作，其餘指令正以模組為單位逐步落地。
+
+## 文件
+
+- [English](docs/en/index.md)
+- [繁體中文](docs/zh-TW/index.md)
+- [日本語](docs/ja-JP/index.md)
+
+## 安全性
+
+請參閱 [SECURITY.md](SECURITY.md)。
 
 ## 授權條款
 

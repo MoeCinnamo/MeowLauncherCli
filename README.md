@@ -35,7 +35,7 @@ meowlaunchcli <command>  # dispatch a subcommand
 | `game`     | Manage and switch game versions |
 | `launch`   | Launch the game |
 | `mod`      | Manage mods (current game version) |
-| `account`  | Manage accounts |
+| `account`  | Manage accounts (`account local add/del <user>`) |
 | `world`    | Manage worlds (current game version) |
 | `resource` | Manage resource packs (current game version) |
 | `config`   | Show or edit configuration |
@@ -61,7 +61,18 @@ Copy `config.json.example` to `config.json` and adjust it to your needs.
 
 ## Status
 
-Early development. `help` and `version` are implemented; the remaining commands land module by module.
+Early development. `help`, `version` and `account local add/del` are
+implemented; the remaining commands land module by module.
+
+## Documentation
+
+- [English](docs/en/index.md)
+- [繁體中文](docs/zh-TW/index.md)
+- [日本語](docs/ja-JP/index.md)
+
+## Security
+
+See [SECURITY.md](SECURITY.md).
 
 ## License
 

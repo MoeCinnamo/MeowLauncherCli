@@ -20,5 +20,12 @@
   },
   "error": {
     "unknown_command": "未知指令：%s"
+  },
+  "account": {
+    "usage": "用法：meowlaunchcli account local <add|del> <使用者名稱>",
+    "added": "已新增本機帳號：%s",
+    "removed": "已移除本機帳號：%s",
+    "exists": "帳號已存在",
+    "not_found": "找不到帳號"
   }
 }

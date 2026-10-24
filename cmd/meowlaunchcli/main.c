@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "internal/account/account.h"
 #include "internal/help/help.h"
 #include "internal/i18n/i18n.h"
 #include "internal/version/version.h"
@@ -25,6 +26,19 @@ int main(int argc, char **argv)
     if (strcmp(argv[1], "version") == 0) {
         Version_Print();
         return 0;
+    }
+
+    if (strcmp(argv[1], "account") == 0) {
+        if (argc >= 5 && strcmp(argv[2], "local") == 0) {
+            if (strcmp(argv[3], "add") == 0) {
+                return Account_Local_Add(argv[4]);
+            }
+            if (strcmp(argv[3], "del") == 0) {
+                return Account_Local_Del(argv[4]);
+            }
+        }
+        fprintf(stderr, "%s\n", I18n("account.usage"));
+        return 1;
     }
 
     /* TODO: subcommand dispatch table goes here. */

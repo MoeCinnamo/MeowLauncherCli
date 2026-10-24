@@ -20,5 +20,12 @@
   },
   "error": {
     "unknown_command": "Unknown command: %s"
+  },
+  "account": {
+    "usage": "Usage: meowlaunchcli account local <add|del> <username>",
+    "added": "Added local account: %s",
+    "removed": "Removed local account: %s",
+    "exists": "Account already exists",
+    "not_found": "Account not found"
   }
 }
