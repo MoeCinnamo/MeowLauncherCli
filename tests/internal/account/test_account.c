@@ -47,5 +47,11 @@ int main(void)
     CHECK(Account_Local_Del("alice") == 0, "del alice succeeds");
     CHECK(Account_Local_Del("nobody") != 0, "del unknown fails");
 
+    /* Empty / NULL name paths. */
+    CHECK(Account_Local_Add("") != 0, "add empty name fails");
+    CHECK(Account_Local_Add(NULL) != 0, "add NULL name fails");
+    CHECK(Account_Local_Del("") != 0, "del empty name fails");
+    CHECK(Account_Local_Del(NULL) != 0, "del NULL name fails");
+
     return failures ? 1 : 0;
 }

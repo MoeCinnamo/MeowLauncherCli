@@ -2,6 +2,19 @@
 
 Newest record on top.
 
+## 2026-10-24 Per-source test split and edge-branch coverage
+
+- **Reason**: Unit tests were monolithic; codecov/patch still flagged uncovered
+  edge branches in account/usersfile/json_io; Windows MinGW lacks `ftruncate`.
+- **Decisions**:
+  - Test files split one-per-source: `test_account/help/usersfile/uuid.c`,
+    `test_json_io/walk.c`, `test_help.c`, `test_i18n.c`, `test_version.c`.
+  - Edge coverage added: empty/NULL username, home-unset path, malformed
+    insert/remove buffers. Truncated-file fread test dropped (`ftruncate` is
+    POSIX-only, unavailable on MinGW).
+  - CI uploads `build_test/junit.xml` to codecov/test-results-action.
+- **Trade-off**: None.
+
 ## 2026-10-24 Coverage hardening, nested JSON walker fix, test/build isolation
 
 - **Reason**: codecov/patch sat below target; `Json_FindObject` used `strchr('}')`

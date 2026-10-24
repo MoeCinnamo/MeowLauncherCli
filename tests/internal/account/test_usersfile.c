@@ -32,6 +32,36 @@ int main(void)
               "usersfile_path returns users.json path");
     }
 
+    /* home unset -> usersfile_path returns -1. */
+#ifdef _WIN32
+    putenv("USERPROFILE=");
+#else
+    unsetenv("HOME");
+#endif
+    {
+        char p[1024];
+        CHECK(usersfile_path(p, sizeof p) != 0, "usersfile_path home NULL -> -1");
+    }
+#ifdef _WIN32
+    { char b[256]; snprintf(b, sizeof b, "USERPROFILE=%s", tmp); putenv(b); }
+#else
+    setenv("HOME", tmp, 1);
+#endif
+
+    /* insert with no ']' -> -1. */
+    {
+        char *bad = strdup("{\"users\":oops");
+        CHECK(usersfile_insert(&bad, "x", "y") == -1, "insert no bracket -> -1");
+        free(bad);
+    }
+
+    /* remove with no closing '}' -> -1. */
+    {
+        char *bad = strdup("[{\"name\":\"x\"");
+        CHECK(usersfile_remove(&bad, "x") == -1, "remove no brace -> -1");
+        free(bad);
+    }
+
     {
         char *e = usersfile_load("/nonexistent/___no_such___.json");
         CHECK(e != NULL, "usersfile_load missing returns empty");
