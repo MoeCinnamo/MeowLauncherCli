@@ -70,12 +70,14 @@ LANG=ja_JP.UTF-8 "$BIN" | grep -q "コマンド:" \
 # 8. Single-language build (LANGS=en): any system locale still yields English.
 echo "[INFO] Single-language build check..."
 LANGS="en" "$PROJECT_ROOT/scripts/build.sh" >/dev/null
+rm -f "$out_dir"/*.gcda 2>/dev/null || true
 LANG=zh_TW.UTF-8 "$BIN" | grep -q "Usage: meowlaunchcli" \
     || { echo "[FAIL] single-lang build ignored $LANGS"; status=1; }
 
 # 9. Language not compiled in (LANGS=en ja-JP): zh locale falls back English.
 echo "[INFO] Uncompiled-language fallback check..."
 LANGS="en ja-JP" "$PROJECT_ROOT/scripts/build.sh" >/dev/null
+rm -f "$out_dir"/*.gcda 2>/dev/null || true
 LANG=zh_TW.UTF-8 "$BIN" | grep -q "Usage: meowlaunchcli" \
     || { echo "[FAIL] uncompiled zh locale did not fall back to English"; status=1; }
 
@@ -84,6 +86,7 @@ echo "[INFO] Unit tests..."
 # Rebuild the default all-languages binary: steps 8-9 rebuilt with reduced
 # LANGS, which would leave the unit tests without the zh-TW archive.
 "$PROJECT_ROOT/scripts/build.sh" >/dev/null
+rm -f "$out_dir"/*.gcda 2>/dev/null || true
 CC="${CC:-cc}"
 CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L -I.}"
 for test_src in tests/*/test_*.c; do

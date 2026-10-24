@@ -1,9 +1,10 @@
 /*
  * Runtime localization.
  *
- * Language archives (JSON files under lang/) are embedded into the binary
- * at build time by scripts/build.sh as LANG_JSON_* macros. The active
- * archive is chosen from the system locale (LANG); English is the fallback.
+ * Language archives (JSON files under lang/) are scanned and embedded into
+ * the binary at build time by scripts/build.sh into a generated
+ * builtin_langs[] table. The active archive is chosen from the system locale
+ * (LANG); the first embedded archive (English) is the fallback.
  *
  * The archive format is intentionally minimal: nested objects whose values
  * are plain JSON strings, e.g. {"help": {"tagline": "..."}}. No full JSON
@@ -112,42 +113,22 @@ static const char *find_value(const char *start, const char *end,
 
 void I18n_Init(void)
 {
-#if defined(LANG_JSON_ZH_TW) || defined(LANG_JSON_JA_JP)
+    /* builtin_langs[0] is the fallback archive (English when present);
+     * every later entry matches a locale prefix. */
+    active_json = builtin_langs[0].json;
+    fallback_json = builtin_langs[0].json;
+
     const char *lang = getenv("LANG");
-#else
-    /* Single-language build: no locale-sensitive branch below. */
-    const char *lang = NULL;
-#endif
-
-#ifdef LANG_JSON_EN
-    /* Multi-language build: English is the fallback; the system locale
-     * overrides it only when that language was compiled in. */
-    active_json = LANG_JSON_EN;
-    fallback_json = LANG_JSON_EN;
-#else
-    /* Single-language build: no English fallback exists, so use the one
-     * language compiled in regardless of the system locale. */
-#  ifdef LANG_JSON_ZH_TW
-    active_json = LANG_JSON_ZH_TW;
-#  elif defined(LANG_JSON_JA_JP)
-    active_json = LANG_JSON_JA_JP;
-#  else
-    active_json = "";
-#  endif
-    fallback_json = NULL;
-#endif
-
-#ifdef LANG_JSON_ZH_TW
-    if (lang != NULL && strncmp(lang, "zh", 2) == 0) {
-        active_json = LANG_JSON_ZH_TW;
+    if (lang == NULL) {
+        return;
     }
-#endif
-
-#ifdef LANG_JSON_JA_JP
-    if (lang != NULL && strncmp(lang, "ja", 2) == 0) {
-        active_json = LANG_JSON_JA_JP;
+    for (size_t i = 1; i < BUILTIN_LANGS_COUNT; i++) {
+        size_t plen = strlen(builtin_langs[i].prefix);
+        if (strncmp(lang, builtin_langs[i].prefix, plen) == 0) {
+            active_json = builtin_langs[i].json;
+            break;
+        }
     }
-#endif
 }
 
 const char *I18n(const char *path)

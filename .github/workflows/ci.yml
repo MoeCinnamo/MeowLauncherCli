@@ -1,5 +1,10 @@
 name: test
 
+# Explicit least-privilege token permissions (no implicit read/write default).
+permissions:
+  contents: read
+  id-token: write
+
 on:
   push:
     branches: [main]

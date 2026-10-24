@@ -2,6 +2,26 @@
 
 Newest record on top.
 
+## 2026-10-24 Languages auto-discovered; CI warnings and coverage fixed
+
+- **Reason**: Language list was hardcoded in two places; CI kept tripping on
+  warnings/Windows/coverage.
+- **Decisions**:
+  - build.sh scans `lang/*.json` (no hardcoded list), emits English first as
+    fallback, generates a `builtin_langs[]` table `{prefix, json}` with the
+    locale prefix derived from the filename (zh-TW→"zh"). Adding a language
+    is dropping a file into `lang/`.
+  - `GIT_VERSION` is the full commit hash (`git rev-parse HEAD`).
+  - i18n locale detection walks the generated table (no `#ifdef` language
+    blocks); tests use a `set_lang()` helper (`putenv` on `_WIN32`,
+    `setenv` elsewhere); test.sh removes stale `*.gcda` after each rebuild
+    so gcovr only reads the final build.
+  - Workflow token permissions explicit at workflow level
+    (`contents: read`, `id-token: write`).
+- **Trade-off / Risk**: Filename convention `<langcode>-<region>.json` is
+  the contract; multi-LANGS rebuild coverage is discarded (branches covered
+  by unit tests); Codecov allowed to fail CI.
+
 ## 2026-10-24 Fix CI warnings and unit-test failure
 
 - **Reason**: CI surfaced three issues: unused `lang` in single-language
