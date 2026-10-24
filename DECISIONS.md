@@ -2,6 +2,26 @@
 
 Newest record on top.
 
+## 2026-10-24 Warnings zeroed, per-module unit tests, dual-platform CI
+
+- **Reason**: Fix CI warnings (`-Wcomment`, `-Waddress`), move unit tests
+  under `tests/<module>/`, and extend CI to Windows.
+- **Decisions**:
+  - Zero warnings enforced: block comments must not contain `/*`; English
+    fallback compared through a `fallback_json` pointer variable instead of
+    string-literal addresses.
+  - Internal macros carry no project prefix (`LANG_JSON_*`, `LANG_*`) —
+    internal use only.
+  - Unit tests live in `tests/<module>/test_<module>.c`, each linking only
+    its own module; `test.sh` compiles and runs them into `build_test/`.
+    Smoke tests additionally rebuild with `LANGS=en` and
+    `LANGS=en ja-JP` to hit the i18n `#ifdef` branches.
+  - CI: `.github/workflows/ci.yml` — ubuntu (musl + coverage → Codecov,
+    upload requires `CODECOV_TOKEN` because `main` is a protected branch)
+    plus a windows-latest MinGW smoke job.
+- **Trade-off / Risk**: gcovr report covers both smoke and unit paths;
+  Codecov is allowed to fail CI (`fail_ci_if_error: false`).
+
 ## 2026-10-24 Project foundations (compressed record)
 
 - **Reason**: Lock down the shape of MeowLauncherCli after the first

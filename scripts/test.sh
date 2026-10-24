@@ -67,6 +67,32 @@ LANG=zh_TW.UTF-8 "$BIN" | grep -q "指令：" \
 LANG=ja_JP.UTF-8 "$BIN" | grep -q "コマンド:" \
     || { echo "[FAIL] ja_JP locale did not select Japanese help"; status=1; }
 
+# 8. Single-language build (LANGS=en): any system locale still yields English.
+echo "[INFO] Single-language build check..."
+LANGS="en" "$PROJECT_ROOT/scripts/build.sh" >/dev/null
+LANG=zh_TW.UTF-8 "$BIN" | grep -q "Usage: meowlaunchcli" \
+    || { echo "[FAIL] single-lang build ignored $LANGS"; status=1; }
+
+# 9. Language not compiled in (LANGS=en ja-JP): zh locale falls back English.
+echo "[INFO] Uncompiled-language fallback check..."
+LANGS="en ja-JP" "$PROJECT_ROOT/scripts/build.sh" >/dev/null
+LANG=zh_TW.UTF-8 "$BIN" | grep -q "Usage: meowlaunchcli" \
+    || { echo "[FAIL] uncompiled zh locale did not fall back to English"; status=1; }
+
+# 10. Unit tests: each tests/<module>/test_*.c links against its own module.
+echo "[INFO] Unit tests..."
+CC="${CC:-cc}"
+CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -I.}"
+for test_src in tests/*/test_*.c; do
+    mod="$(basename "$(dirname "$test_src")")"
+    unit_bin="$out_dir/test_${mod}${bin_suffix}"
+    # shellcheck disable=SC2086
+    "$CC" $CFLAGS "$test_src" "internal/$mod/$mod.c" -o "$unit_bin" \
+        || { echo "[FAIL] build unit test $mod"; status=1; continue; }
+    echo "[INFO] == $mod =="
+    "$unit_bin" || { echo "[FAIL] unit test $mod"; status=1; }
+done
+
 # Coverage build: emit an HTML + cobertura report into build_test/ if gcovr
 # is present (cobertura.xml is what Codecov consumes).
 if [ "${COVERAGE:-0}" = "1" ]; then

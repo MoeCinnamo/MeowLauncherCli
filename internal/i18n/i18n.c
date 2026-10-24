@@ -1,9 +1,9 @@
 /*
  * Runtime localization.
  *
- * Language archives (lang/*.json) are embedded into the binary at build
- * time by scripts/build.sh as LANG_JSON_* macros. The active archive
- * is chosen from the system locale (LANG); English is the fallback.
+ * Language archives (JSON files under lang/) are embedded into the binary
+ * at build time by scripts/build.sh as LANG_JSON_* macros. The active
+ * archive is chosen from the system locale (LANG); English is the fallback.
  *
  * The archive format is intentionally minimal: nested objects whose values
  * are plain JSON strings, e.g. {"help": {"tagline": "..."}}. No full JSON
@@ -19,6 +19,10 @@
 
 /* Active archive, selected in I18n_Init(). */
 static const char *active_json;
+
+/* English archive used as lookup fallback; NULL when English was not
+ * compiled in. */
+static const char *fallback_json;
 
 /* Rendered lookup result; single-threaded CLI, one static slot suffices. */
 static char out_buf[256];
@@ -114,6 +118,7 @@ void I18n_Init(void)
     /* Multi-language build: English is the fallback; the system locale
      * overrides it only when that language was compiled in. */
     active_json = LANG_JSON_EN;
+    fallback_json = LANG_JSON_EN;
 #else
     /* Single-language build: no English fallback exists, so use the one
      * language compiled in regardless of the system locale. */
@@ -124,6 +129,7 @@ void I18n_Init(void)
 #  else
     active_json = "";
 #  endif
+    fallback_json = NULL;
 #endif
 
 #ifdef LANG_JSON_ZH_TW
@@ -163,16 +169,15 @@ const char *I18n(const char *path)
         }
     }
 
-    /* Miss: fall back to English, unless already on it. */
-#ifdef LANG_JSON_EN
-    if (active_json != LANG_JSON_EN) {
+    /* Miss: fall back to English, unless already on it. Comparing the
+     * pointer variables (not the literals) keeps the comparison defined. */
+    if (fallback_json != NULL && active_json != fallback_json) {
         const char *saved = active_json;
-        active_json = LANG_JSON_EN;
+        active_json = fallback_json;
         const char *result = I18n(path);
         active_json = saved;
         return result;
     }
-#endif
 
     snprintf(out_buf, sizeof out_buf, "[%s]", path);
     return out_buf;

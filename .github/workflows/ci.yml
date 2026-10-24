@@ -38,3 +38,13 @@ jobs:
           files: build_test/coverage.xml
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
+
+  test-windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and smoke test (MinGW)
+        run: ./scripts/test.sh
