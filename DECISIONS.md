@@ -2,6 +2,24 @@
 
 Newest record on top.
 
+## 2026-10-25 coverage: game help, game show dirs, main.c dispatch
+
+- **Reason**: Raise code coverage on `internal/game/help.c`,
+  `internal/game/game.c` (Game_Show listing branch, malformed config), and
+  `cmd/meowlaunchcli/main.c` (game/account subcommand dispatch).
+- **Decisions**:
+  - `tests/internal/game/test_help.c`: calls `Game_Help()` with i18n init.
+  - `tests/internal/game/test_game.c`: creates fake
+    `build_test/.minecraft/versions/{1.21.11,1.21.11-Neoforge}` dirs to cover
+    the readdir/S_ISDIR loop; writes malformed `config.json` to cover the
+    `Json_FindValue` miss branch in `Game_Current()`.
+  - `tests/cmd/meowlaunchcli/test_main.c`: black-box runs `game help`,
+    `game` (no subcommand → usage), `game switch/current/show`, and
+    `account local show`.
+  - `game` with no subcommand now prints `game.usage` and exits nonzero
+    instead of falling through to `Game_Show()`.
+- **Trade-off**: None.
+
 ## 2026-10-24 game/account subcommands, help, i18n
 
 - **Reason**: Need `game help/switch/current/show` and `account local show`;

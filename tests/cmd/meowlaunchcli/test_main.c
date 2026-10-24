@@ -84,5 +84,33 @@ int main(void)
     rc = run_capture(cmd, buf, sizeof buf);
     CHECK(rc == 0, "account local del exits 0");
 
+    /* account local show: exits 0. */
+    snprintf(cmd, sizeof cmd, "%s account local show 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "account local show exits 0");
+
+    /* game help: exits 0. */
+    snprintf(cmd, sizeof cmd, "%s game help 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "game help exits 0");
+
+    /* game with no subcommand: exits nonzero, prints usage. */
+    snprintf(cmd, sizeof cmd, "%s game 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc != 0, "game no subcommand exits nonzero");
+    CHECK(strstr(buf, "Usage: meowlaunchcli game") != NULL,
+          "game no subcommand prints usage");
+
+    /* game switch/current/show. */
+    snprintf(cmd, sizeof cmd, "%s game switch 1.21.11 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "game switch exits 0");
+    snprintf(cmd, sizeof cmd, "%s game current 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "game current exits 0");
+    snprintf(cmd, sizeof cmd, "%s game show 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "game show exits 0");
+
     return failures ? 1 : 0;
 }

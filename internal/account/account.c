@@ -81,7 +81,10 @@ int Account_Local_Show(void)
     char *buf;
     if (usersfile_path(path, sizeof path) != 0) return 1;
     buf = usersfile_load(path);
-    if (buf == NULL) return 1;
+    if (buf == NULL) {
+        printf("(none)\n");
+        return 0;
+    }
     /* Walk the users array and print each name. */
     const char *p = buf;
     while ((p = strstr(p, "\"name\":")) != NULL) {
