@@ -118,5 +118,50 @@ int main(void)
               "find_value normal hit");
     }
 
+    /* --- find_object: missing closing brace (strchr returns NULL) --- */
+    {
+        const char *json = "{\"help\":{\"a\":\"b\"";
+        const char *end;
+        CHECK(find_object(json, "help", &end) == NULL,
+              "find_object unterminated object -> NULL");
+    }
+
+    /* --- find_value: pattern search exhausts the range (line 111) --- */
+    {
+        const char *obj = "{\"a\":\"b\"}";
+        size_t len;
+        /* end set before the closing brace so the scanner walks past it. */
+        CHECK(find_value(obj, obj + 5, "a", &len) == NULL,
+              "find_value range exhausted -> NULL");
+    }
+
+    /* --- I18n_Init: LANG unset returns early (line 123) --- */
+    {
+#ifdef _WIN32
+        putenv("LANG=");
+#else
+        unsetenv("LANG");
+#endif
+        I18n_Init();
+        CHECK(active_json == builtin_langs[0].json,
+              "unset LANG stays on fallback");
+    }
+
+    /* --- I18n: path without dot returns the path verbatim (lines 142-143) --- */
+    set_lang("C");
+    I18n_Init();
+    CHECK(strcmp(I18n("nodot"), "nodot") == 0,
+          "I18n no-dot path echoed verbatim");
+
+    /* --- I18n: fallback recursion when active archive misses a key (line 160) --- */
+    /* On the zh archive, ask for a key that zh lacks. The fallback branch
+     * fires (active != fallback), recurses into en; en also lacks it, so
+     * the [key] placeholder comes back. The recursion path itself is what
+     * we exercise. */
+    set_lang("zh_TW.UTF-8");
+    I18n_Init();
+    CHECK(strcmp(I18n("help.totally_absent"), "[help.totally_absent]") == 0,
+          "zh miss recurses to en fallback then placeholder");
+
     return failures ? 1 : 0;
 }

@@ -2,6 +2,20 @@
 
 Newest record on top.
 
+## 2026-10-24 Cross-platform test fixes and coverage tuning
+
+- **Reason**: Windows CI failed on `pclose()` exit-status encoding; unit
+  tests printed `build unknown`; codecov/patch showed 0% because tests/
+  were counted; i18n defensive branches still uncovered.
+- **Decisions**:
+  - Entry test asserts `rc != 0` rather than the POSIX `status<<8` value.
+  - Unit-test CFLAGS inject `-DGIT_VERSION` from `git rev-parse HEAD`.
+  - gcovr excludes `tests/`, `build/`, `build_test/` — coverage measures
+    product code only.
+  - i18n tests now cover unterminated object, range-exhausted scanner,
+    unset LANG, no-dot path, and zh→en fallback recursion.
+- **Trade-off**: None.
+
 ## 2026-10-24 Tests mirror source tree; i18n parser branches covered
 
 - **Reason**: Tests were flat under `tests/<module>/`; the i18n JSON walker
