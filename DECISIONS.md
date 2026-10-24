@@ -2,6 +2,23 @@
 
 Newest record on top.
 
+## 2026-10-24 Account module hardening: Windows mkdir, NUL-gap fix
+
+- **Reason**: On Windows/MSYS the old `system("mkdir -p ...")` shell
+  quoting failed and triggered `-Wformat-truncation`; the in-place
+  `memmove`+`snprintf` insert left a NUL gap that truncated users.json,
+  causing every second add to report "already exists".
+- **Decisions**:
+  - `usersfile_save` walks the path and calls `mkdir()`/`_mkdir()` per
+    component — no shell-out, zero warnings.
+  - `usersfile_insert` rebuilds the whole buffer in `malloc`
+    (head + entry + tail); no in-place patching. No leading comma when the
+    array is still empty.
+  - Unit test stubs `I18n()` and removes the previous `users.json` before
+    running so stale state cannot leak.
+- **Trade-off**: Rebuilding the buffer on every insert is fine for the
+  tiny file size.
+
 ## 2026-10-24 Local accounts, split modules, visibility hardening
 
 - **Reason**: Need `account local add/del` with on-disk persistence; logic

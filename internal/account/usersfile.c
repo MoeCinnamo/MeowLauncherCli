@@ -6,6 +6,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
+#ifdef _WIN32
+#include <direct.h>
+#define MKDIR(p) _mkdir(p)
+#else
+#define MKDIR(p) mkdir((p), 0755)
+#endif
 
 #include "internal/account/private.h"
 
@@ -59,21 +68,21 @@ char *usersfile_load(const char *path)
 
 int usersfile_save(const char *path, const char *buf)
 {
-    char dir[1024];
+    char tmp[1024];
     FILE *out;
-    snprintf(dir, sizeof dir, "%s", path);
-    char *slash = strrchr(dir, '/');
-#ifdef _WIN32
-    if (slash == NULL) slash = strrchr(dir, '\\');
-#endif
-    if (slash) *slash = '\0';
-#ifndef _WIN32
-    {
-        char mk[1200];
-        snprintf(mk, sizeof mk, "mkdir -p \"%s\" 2>/dev/null", dir);
-        system(mk);
+    char *p;
+
+    /* Recursively mkdir every leading directory component. */
+    snprintf(tmp, sizeof tmp, "%s", path);
+    for (p = tmp + 1; *p; p++) {
+        if (*p == '/' || *p == '\\') {
+            char c = *p;
+            *p = '\0';
+            MKDIR(tmp);
+            *p = c;
+        }
     }
-#endif
+
     out = fopen(path, "wb");
     if (out == NULL) {
         return -1;
@@ -92,27 +101,36 @@ static int name_exists(const char *buf, const char *name)
 
 int usersfile_insert(char **buf, const char *name, const char *uuid)
 {
-    size_t len = strlen(*buf);
-    char *close, *np;
+    char *close;
+    size_t head_len, tail_len, new_len;
+    char entry[200];
+    int entry_len;
+    char *nb;
 
     if (name_exists(*buf, name)) {
         return -1;
     }
-    np = realloc(*buf, len + 256);
-    if (np == NULL) {
-        return -1;
-    }
-    *buf = np;
-
     close = strrchr(*buf, ']');
     if (close == NULL) {
         return -1;
     }
-    size_t tail = strlen(close);
-    memmove(close + 64, close, tail + 1);
-    snprintf(close, 64,
-             ",{\"name\":\"%s\",\"type\":\"local\",\"uuid\":\"%s\"}",
-             name, uuid);
+    head_len = (size_t)(close - *buf);
+    tail_len = strlen(close);
+    /* No leading comma when the array is still empty ("...[]"). */
+    entry_len = snprintf(entry, sizeof entry,
+                         "%s{\"name\":\"%s\",\"type\":\"local\",\"uuid\":\"%s\"}",
+                         (head_len > 0 && (*buf)[head_len - 1] == '[') ? "" : ",",
+                         name, uuid);
+    new_len = head_len + (size_t)entry_len + tail_len + 1;
+    nb = malloc(new_len);
+    if (nb == NULL) {
+        return -1;
+    }
+    memcpy(nb, *buf, head_len);
+    memcpy(nb + head_len, entry, (size_t)entry_len);
+    strcpy(nb + head_len + (size_t)entry_len, close);
+    free(*buf);
+    *buf = nb;
     return 0;
 }
 

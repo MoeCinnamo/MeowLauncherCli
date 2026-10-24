@@ -13,6 +13,12 @@
 #include "internal/account/uuid.c"
 #include "internal/account/usersfile.c"
 
+/* i18n stub: tests care about storage behaviour, not translations. */
+const char *I18n(const char *key)
+{
+    return key;
+}
+
 static int failures = 0;
 
 #define CHECK(cond, name)                                              \
@@ -33,10 +39,19 @@ int main(void)
     }
 #else
     setenv("HOME", tmp, 1);
-    char mk[300];
-    snprintf(mk, sizeof mk, "rm -rf %s && mkdir -p %s", tmp, tmp);
-    system(mk);
 #endif
+    /* Always wipe the previous test file so state does not leak across runs. */
+    {
+        char path[1200];
+        snprintf(path, sizeof path,
+#ifdef _WIN32
+                 "%s\\.meowlaunch\\data\\users.json",
+#else
+                 "%s/.meowlaunch/data/users.json",
+#endif
+                 tmp);
+        remove(path);
+    }
 
     CHECK(Account_Local_Add("alice") == 0, "add alice succeeds");
     CHECK(Account_Local_Add("bob") == 0, "add bob succeeds");
