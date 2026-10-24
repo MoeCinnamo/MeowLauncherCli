@@ -62,5 +62,27 @@ int main(void)
     CHECK(strstr(buf, "MeowLauncherCli v") != NULL,
           "version prints banner");
 
+    /* account help: exits 0 and prints account help. */
+    snprintf(cmd, sizeof cmd, "%s account help 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "account help exits 0");
+    CHECK(strstr(buf, "Account management") != NULL,
+          "account help prints title");
+
+    /* account with bad subcommand: exits nonzero, prints usage. */
+    snprintf(cmd, sizeof cmd, "%s account bogus 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc != 0, "account bogus exits nonzero");
+    CHECK(strstr(buf, "account local") != NULL,
+          "account bogus prints usage");
+
+    /* account local add/del round-trip. */
+    snprintf(cmd, sizeof cmd, "%s account local add cmdtester 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "account local add exits 0");
+    snprintf(cmd, sizeof cmd, "%s account local del cmdtester 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "account local del exits 0");
+
     return failures ? 1 : 0;
 }

@@ -2,6 +2,28 @@
 
 Newest record on top.
 
+## 2026-10-24 Coverage hardening, nested JSON walker fix, test/build isolation
+
+- **Reason**: codecov/patch sat below target; `Json_FindObject` used `strchr('}')`
+  which broke on nested objects (account.help); test.sh leaked into build/;
+  include guards carried a stale `MEOW_` prefix.
+- **Decisions**:
+  - `Json_FindObject` now counts brace depth to find the matching close,
+    supporting nested objects (`account.help.title`).
+  - Include guards renamed: `JSON_H`, `ACCOUNT_H`, `ACCOUNT_HELP_H`,
+    `ACCOUNT_PRIVATE_H`, `HELP_H`, `I18N_H`, `VERSION_H` (no `MEOW_` prefix).
+  - `build.sh` writes only to `build/`; `test.sh` writes only to `build_test/`.
+    test.sh has its own `rebuild()` that regenerates `lang_embedded.h` and
+    parallel-compiles objects into `build_test/obj/` via `xargs -P $(nproc)`.
+    No cross-contamination between the two directories.
+  - COVERAGE=1 emits `build_test/coverage.html` + `coverage.xml` via gcovr.
+  - Tests added: `account help`/`account bogus`/add/del round-trip in
+    `tests/cmd/meowlaunchcli`; nested-object, long-key, unterminated-string,
+    ws-skip, save/load round-trip in `tests/internal/json`; `Account_Help()`,
+    `usersfile_path/load/save`, direct insert/remove edge branches in
+    `tests/internal/account`.
+- **Trade-off**: Walker remains a minimal hand-rolled subset; no full parser.
+
 ## 2026-10-24 internal/json split, build isolation, account help
 
 - **Reason**: Multiple modules need JSON IO + flat-object walker; build
