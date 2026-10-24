@@ -28,8 +28,16 @@ bin_suffix=""
 uname_s="$(uname -s)"
 case "$uname_s" in
     Linux*)
-        CC="${CC:-musl-gcc}"
-        LDFLAGS="${LDFLAGS:--static}"
+        # Alpine ships musl natively; its gcc IS the musl compiler, so never
+        # look for the musl-gcc wrapper there. Other distros default to
+        # musl-gcc + static.
+        if [ -r /etc/os-release ] && grep -qi '^ID=alpine' /etc/os-release; then
+            CC="${CC:-gcc}"
+            LDFLAGS="${LDFLAGS:-}"
+        else
+            CC="${CC:-musl-gcc}"
+            LDFLAGS="${LDFLAGS:--static}"
+        fi
         ;;
     MINGW*|MSYS*|CYGWIN*)
         CC="${CC:-gcc}"
