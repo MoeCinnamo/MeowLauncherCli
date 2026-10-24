@@ -1,5 +1,9 @@
 # MeowLauncherCli
 
+<a href="https://github.com/MoeCinnamo/MeowLauncherCli/actions"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/MoeCinnamo/MeowLauncherCli/ci.yml?branch=dev&style=flat-square"></a>
+<a href="https://codecov.io/gh/MoeCinnamo/MeowLauncherCli"><img alt="Codecov" src="https://img.shields.io/codecov/c/github/MoeCinnamo/MeowLauncherCli?style=flat-square"></a>
+<a href="https://github.com/MoeCinnamo/MeowLauncherCli/blob/master/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/MoeCinnamo/MeowLauncherCli?style=flat-square"></a>
+
 [繁體中文](README-zh_TW.md) [English](README.md) [日本語](README-ja_JP.md)
 
 > 一個中國式家長無從檢舉的 Minecraft 啟動器——因為它完全長在終端機裡，在那些「看見什麼都覺得在害小孩」的家長眼裡，你只是在認真寫程式。

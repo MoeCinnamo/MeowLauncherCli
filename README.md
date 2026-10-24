@@ -1,5 +1,9 @@
 # MeowLauncherCli
 
+<a href="https://github.com/MoeCinnamo/MeowLauncherCli/actions"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/MoeCinnamo/MeowLauncherCli/ci.yml?branch=dev&style=flat-square"></a>
+<a href="https://codecov.io/gh/MoeCinnamo/MeowLauncherCli"><img alt="Codecov" src="https://img.shields.io/codecov/c/github/MoeCinnamo/MeowLauncherCli?style=flat-square"></a>
+<a href="https://github.com/MoeCinnamo/MeowLauncherCli/blob/master/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/MoeCinnamo/MeowLauncherCli?style=flat-square"></a>
+
 [English](README.md) [繁體中文](README-zh_TW.md) [日本語](README-ja_JP.md)
 
 > A Minecraft launcher that Chinese-style parents cannot report — it lives entirely in the terminal, and to the kind of parent who sees a threat to their child in every pixel, it just looks like serious developer work.
