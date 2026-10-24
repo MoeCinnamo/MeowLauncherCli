@@ -1,34 +1,56 @@
 /*
  * users.json persistence. All functions here operate on the simple shape
  * this module writes: {"users":[{...}, ...]}.
+ *
+ * Data lives next to the executable: <exedir>/data/users.json.
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#include <libgen.h>
+#endif
+
 #include "internal/json/json.h"
 #include "internal/account/private.h"
 
-static const char *home_dir(void)
+/* Fill buf with the directory containing the running executable.
+ * Returns 0 on success, -1 on error. */
+static int exedir(char *buf, size_t bufsz)
 {
 #ifdef _WIN32
-    return getenv("USERPROFILE");
+    DWORD n = GetModuleFileNameA(NULL, buf, (DWORD)bufsz);
+    if (n == 0 || n >= bufsz) return -1;
+    /* Strip the filename. */
+    char *slash = strrchr(buf, '\\');
+    if (slash) *slash = '\0';
+    return 0;
 #else
-    return getenv("HOME");
+    ssize_t n = readlink("/proc/self/exe", buf, bufsz - 1);
+    if (n <= 0) return -1;
+    buf[n] = '\0';
+    char *d = dirname(buf);
+    /* dirname may return a static buffer; copy back. */
+    if (d != buf) snprintf(buf, bufsz, "%s", d);
+    return 0;
 #endif
 }
 
 int usersfile_path(char *buf, size_t bufsz)
 {
-    const char *home = home_dir();
-    if (home == NULL) {
+    char dir[1024];
+    if (exedir(dir, sizeof dir) != 0) {
         return -1;
     }
 #ifdef _WIN32
-    return snprintf(buf, bufsz, "%s\\.meowlaunch\\data\\users.json", home) < 0;
+    return snprintf(buf, bufsz, "%s\\data\\users.json", dir) < 0;
 #else
-    return snprintf(buf, bufsz, "%s/.meowlaunch/data/users.json", home) < 0;
+    return snprintf(buf, bufsz, "%s/data/users.json", dir) < 0;
 #endif
 }
 

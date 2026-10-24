@@ -34,35 +34,11 @@ static int failures = 0;
 
 int main(void)
 {
-    const char *tmp = getenv("MEOW_TEST_HOME");
-    if (tmp == NULL) tmp = "/tmp/meow_acct_test";
-#ifdef _WIN32
-    { char b[256]; snprintf(b, sizeof b, "USERPROFILE=%s", tmp); putenv(b); }
-#else
-    setenv("HOME", tmp, 1);
-#endif
-
     {
         char p[1024];
         CHECK(usersfile_path(p, sizeof p) == 0 && strstr(p, "users.json") != NULL,
               "usersfile_path returns users.json path");
     }
-
-    /* home unset -> usersfile_path returns -1. */
-#ifdef _WIN32
-    putenv("USERPROFILE=");
-#else
-    unsetenv("HOME");
-#endif
-    {
-        char p[1024];
-        CHECK(usersfile_path(p, sizeof p) != 0, "usersfile_path home NULL -> -1");
-    }
-#ifdef _WIN32
-    { char b[256]; snprintf(b, sizeof b, "USERPROFILE=%s", tmp); putenv(b); }
-#else
-    setenv("HOME", tmp, 1);
-#endif
 
     /* insert with no ']' -> -1. */
     {

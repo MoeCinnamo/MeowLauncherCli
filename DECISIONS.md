@@ -2,6 +2,17 @@
 
 Newest record on top.
 
+## 2026-10-24 Data path next to executable
+
+- **Reason**: User wants `users.json` alongside the binary, not under
+  `~/.meowlaunch/`.
+- **Decisions**:
+  - `usersfile.c` resolves the directory of the running exe
+    (`GetModuleFileNameA` on Windows, `/proc/self/exe` on Linux) and writes to
+    `<exedir>/data/users.json`.
+  - Tests drop the HOME/USERPROFILE redirect.
+- **Trade-off**: Portable only on Windows and Linux (readlink /proc/self/exe).
+
 ## 2026-10-24 codecov patch threshold relaxed
 
 - **Reason**: codecov/patch at 90.47% vs hardcoded 91.66% target; remaining gap
