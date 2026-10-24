@@ -122,18 +122,20 @@ if [ -z "${CC:-}" ]; then
 fi
 CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L -I.}"
 [ "${COVERAGE:-0}" = "1" ] && CFLAGS="$CFLAGS --coverage"
-for test_src in tests/*/test_*.c; do
-    mod="$(basename "$(dirname "$test_src")")"
-    unit_bin="$out_dir/test_${mod}${bin_suffix}"
+for test_src in $(find tests -name 'test_*.c'); do
+    mod="$(dirname "$test_src" | sed 's|tests/||')"
+    unit_bin="$out_dir/test_$(echo "$mod" | tr '/' '_')${bin_suffix}"
+    # Each test .c includes the source under test directly (or is a black-box
+    # main), so no separate module link step is needed.
     # shellcheck disable=SC2086
-    if ! "$CC" $CFLAGS "$test_src" "internal/$mod/$mod.c" -o "$unit_bin"; then
+    if ! "$CC" $CFLAGS "$test_src" -o "$unit_bin"; then
         echo "[FAIL] build unit test $mod"
         results+=("FAIL|unit test $mod")
         status=1
         continue
     fi
     echo "[INFO] == $mod =="
-    if "$unit_bin"; then
+    if MEOW_BIN="$BIN" "$unit_bin"; then
         results+=("PASS|unit test $mod")
     else
         echo "[FAIL] unit test $mod"

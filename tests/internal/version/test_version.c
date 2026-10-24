@@ -6,7 +6,7 @@
 
 #include <stdio.h>
 
-#include "internal/version/version.h"
+#include "internal/version/version.c"
 
 int main(void)
 {

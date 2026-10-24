@@ -2,6 +2,21 @@
 
 Newest record on top.
 
+## 2026-10-24 Tests mirror source tree; i18n parser branches covered
+
+- **Reason**: Tests were flat under `tests/<module>/`; the i18n JSON walker
+  (`skip_ws`/`find_object`/`find_value` defensive branches) had no coverage.
+- **Decisions**:
+  - `tests/` mirrors the source layout: `tests/internal/i18n/...`,
+    `tests/internal/version/...`, `tests/cmd/meowlaunchcli/...`.
+  - Unit tests `#include` the `.c` under test directly so `static` helpers
+    become reachable; no separate link step.
+  - i18n tests now cover whitespace skipping, missing section/colon/brace,
+    missing key, colon mismatch, unquoted value, and normal hit.
+  - Entry test runs the real binary as a subprocess (`MEOW_BIN` env).
+- **Trade-off**: `#include .c` couples the test to internal structure, but
+  it keeps the build trivial and reaches otherwise-unreachable statics.
+
 ## 2026-10-24 Languages auto-discovered; CI warnings and coverage fixed
 
 - **Reason**: Language list was hardcoded in two places; CI kept tripping on
