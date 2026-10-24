@@ -2,6 +2,15 @@
 
 Newest record on top.
 
+## 2026-10-24 Fix find_value range-exhausted unit test
+
+- **Reason**: The first test for the outer-loop `return NULL` (line 111)
+  accidentally produced a non-NULL empty-value result because the range
+  still contained the pattern.
+- **Trade-off**: Use an end pointer shorter than the pattern so the while
+  condition fails immediately.
+- **Risk**: None.
+
 ## 2026-10-24 Cross-platform test fixes and coverage tuning
 
 - **Reason**: Windows CI failed on `pclose()` exit-status encoding; unit

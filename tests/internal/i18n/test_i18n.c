@@ -126,12 +126,13 @@ int main(void)
               "find_object unterminated object -> NULL");
     }
 
-    /* --- find_value: pattern search exhausts the range (line 111) --- */
+    /* --- find_value: outer loop never enters (line 111) --- */
     {
-        const char *obj = "{\"a\":\"b\"}";
+        const char *obj = "{}";
         size_t len;
-        /* end set before the closing brace so the scanner walks past it. */
-        CHECK(find_value(obj, obj + 5, "a", &len) == NULL,
+        /* end is shorter than the pattern, so the while condition fails at
+         * once and we reach the trailing return NULL. */
+        CHECK(find_value(obj, obj + 1, "a", &len) == NULL,
               "find_value range exhausted -> NULL");
     }
 
