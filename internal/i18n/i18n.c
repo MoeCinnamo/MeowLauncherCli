@@ -2,7 +2,7 @@
  * Runtime localization.
  *
  * Language archives (lang/*.json) are embedded into the binary at build
- * time by scripts/build.sh as MEOW_LANG_JSON_* macros. The active archive
+ * time by scripts/build.sh as LANG_JSON_* macros. The active archive
  * is chosen from the system locale (LANG); English is the fallback.
  *
  * The archive format is intentionally minimal: nested objects whose values
@@ -110,31 +110,31 @@ void I18n_Init(void)
 {
     const char *lang = getenv("LANG");
 
-#ifdef MEOW_LANG_JSON_EN
+#ifdef LANG_JSON_EN
     /* Multi-language build: English is the fallback; the system locale
      * overrides it only when that language was compiled in. */
-    active_json = MEOW_LANG_JSON_EN;
+    active_json = LANG_JSON_EN;
 #else
     /* Single-language build: no English fallback exists, so use the one
      * language compiled in regardless of the system locale. */
-#  ifdef MEOW_LANG_JSON_ZH_TW
-    active_json = MEOW_LANG_JSON_ZH_TW;
-#  elif defined(MEOW_LANG_JSON_JA_JP)
-    active_json = MEOW_LANG_JSON_JA_JP;
+#  ifdef LANG_JSON_ZH_TW
+    active_json = LANG_JSON_ZH_TW;
+#  elif defined(LANG_JSON_JA_JP)
+    active_json = LANG_JSON_JA_JP;
 #  else
     active_json = "";
 #  endif
 #endif
 
-#ifdef MEOW_LANG_JSON_ZH_TW
+#ifdef LANG_JSON_ZH_TW
     if (lang != NULL && strncmp(lang, "zh", 2) == 0) {
-        active_json = MEOW_LANG_JSON_ZH_TW;
+        active_json = LANG_JSON_ZH_TW;
     }
 #endif
 
-#ifdef MEOW_LANG_JSON_JA_JP
+#ifdef LANG_JSON_JA_JP
     if (lang != NULL && strncmp(lang, "ja", 2) == 0) {
-        active_json = MEOW_LANG_JSON_JA_JP;
+        active_json = LANG_JSON_JA_JP;
     }
 #endif
 }
@@ -164,10 +164,10 @@ const char *I18n(const char *path)
     }
 
     /* Miss: fall back to English, unless already on it. */
-#ifdef MEOW_LANG_JSON_EN
-    if (active_json != MEOW_LANG_JSON_EN) {
+#ifdef LANG_JSON_EN
+    if (active_json != LANG_JSON_EN) {
         const char *saved = active_json;
-        active_json = MEOW_LANG_JSON_EN;
+        active_json = LANG_JSON_EN;
         const char *result = I18n(path);
         active_json = saved;
         return result;
