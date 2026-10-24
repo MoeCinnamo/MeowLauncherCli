@@ -122,6 +122,8 @@ if [ -z "${CC:-}" ]; then
 fi
 CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L -I.}"
 [ "${COVERAGE:-0}" = "1" ] && CFLAGS="$CFLAGS --coverage"
+GIT_VERSION="${GIT_VERSION:-$(git rev-parse HEAD 2>/dev/null || echo unknown)}"
+CFLAGS="$CFLAGS -DGIT_VERSION=\"$GIT_VERSION\""
 for test_src in $(find tests -name 'test_*.c'); do
     mod="$(dirname "$test_src" | sed 's|tests/||')"
     unit_bin="$out_dir/test_$(echo "$mod" | tr '/' '_')${bin_suffix}"
