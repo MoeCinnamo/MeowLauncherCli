@@ -176,8 +176,10 @@ echo "[INFO] JUnit report: $junit"
 if [ "${COVERAGE:-0}" = "1" ]; then
     if command -v gcovr >/dev/null 2>&1; then
         gcovr -r "$PROJECT_ROOT" --html-details \
+            --exclude '^tests/' --exclude '^build/' --exclude '^build_test/' \
             -o "$out_dir/coverage.html" "$out_dir"
         gcovr -r "$PROJECT_ROOT" --xml \
+            --exclude '^tests/' --exclude '^build/' --exclude '^build_test/' \
             -o "$out_dir/coverage.xml" "$out_dir"
         echo "[INFO] Coverage report: $out_dir/coverage.html"
     else
