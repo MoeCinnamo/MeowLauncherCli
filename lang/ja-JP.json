@@ -1,0 +1,24 @@
+{
+  "help": {
+    "tagline": "Pure CLI な Minecraft ランチャー",
+    "usage": "使い方: meowlaunchcli [command] [arguments]",
+    "commands_header": "コマンド:",
+    "cmd_help": "このヘルプを表示",
+    "cmd_version": "MeowLauncherCli のバージョンを表示",
+    "cmd_install": "ゲーム・modローダー・mod・パック・統合パックをインストール",
+    "cmd_remove": "ゲーム・modローダー・mod・パック・統合パックをアンインストール",
+    "cmd_update": "ゲーム情報ソースを更新",
+    "cmd_search": "ゲーム・ローダー・mod・パックのバージョンを検索",
+    "cmd_game": "ゲームバージョンを管理・切り替え",
+    "cmd_launch": "ゲームを起動",
+    "cmd_mod": "mod を管理（現在のゲームバージョン）",
+    "cmd_account": "アカウントを管理",
+    "cmd_world": "ワールドを管理（現在のゲームバージョン）",
+    "cmd_resource": "リソースパックを管理（現在のゲームバージョン）",
+    "cmd_config": "設定を表示・変更",
+    "see_help": "'meowlaunchcli <command> --help' で詳細を表示。"
+  },
+  "error": {
+    "unknown_command": "不明なコマンド: %s"
+  }
+}

@@ -1,0 +1,39 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y musl-tools gcc gcovr
+
+      - name: Build and smoke test
+        run: |
+          chmod 755 * .* -R
+          ./scripts/test.sh
+
+      - name: Coverage build and report
+        env:
+          CC: gcc
+        run: COVERAGE=1 ./scripts/test.sh
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: build_test/coverage*.html
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: build_test/coverage.xml
+          fail_ci_if_error: false

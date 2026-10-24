@@ -1,0 +1,24 @@
+{
+  "help": {
+    "tagline": "a pure command-line Minecraft launcher",
+    "usage": "Usage: meowlaunchcli [command] [arguments]",
+    "commands_header": "Commands:",
+    "cmd_help": "Show this help list",
+    "cmd_version": "Show MeowLauncherCli version",
+    "cmd_install": "Install game, mod loaders, mods, packs, modpacks",
+    "cmd_remove": "Remove game, mod loaders, mods, packs, modpacks",
+    "cmd_update": "Refresh game metadata sources",
+    "cmd_search": "Search available game / loader / mod / pack versions",
+    "cmd_game": "Manage and switch game versions",
+    "cmd_launch": "Launch the game",
+    "cmd_mod": "Manage mods (current game version)",
+    "cmd_account": "Manage accounts",
+    "cmd_world": "Manage worlds (current game version)",
+    "cmd_resource": "Manage resource packs (current game version)",
+    "cmd_config": "Show or edit configuration",
+    "see_help": "Run 'meowlaunchcli <command> --help' for more details."
+  },
+  "error": {
+    "unknown_command": "Unknown command: %s"
+  }
+}

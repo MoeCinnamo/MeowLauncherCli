@@ -1,0 +1,24 @@
+{
+  "help": {
+    "tagline": "純命令列的 Minecraft 啟動器",
+    "usage": "用法：meowlaunchcli [command] [arguments]",
+    "commands_header": "指令：",
+    "cmd_help": "顯示此幫助列表",
+    "cmd_version": "顯示 MeowLauncherCli 版本號",
+    "cmd_install": "安裝遊戲、模組載入器、模組、資源包、整合包",
+    "cmd_remove": "移除遊戲、模組載入器、模組、資源包、整合包",
+    "cmd_update": "更新遊戲來源",
+    "cmd_search": "搜尋遊戲、載入器、模組、資源包、整合包版本",
+    "cmd_game": "管理和切換遊戲版本",
+    "cmd_launch": "啟動遊戲版本",
+    "cmd_mod": "管理模組（目前遊戲版本）",
+    "cmd_account": "管理帳號",
+    "cmd_world": "管理世界（目前遊戲版本）",
+    "cmd_resource": "管理資源包（目前遊戲版本）",
+    "cmd_config": "設定",
+    "see_help": "執行 'meowlaunchcli <command> --help' 檢視更多說明。"
+  },
+  "error": {
+    "unknown_command": "未知指令：%s"
+  }
+}

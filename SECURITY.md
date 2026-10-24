@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-MeowLauncherCli is in early development. Security fixes land on the `main` development branch. No stable release series exists yet; once releases begin, only the latest minor version will receive security patches.
+MeowLauncherCli is in early development (current build: `v0.0.1`). Security fixes land on the `main` development branch. No stable release series exists yet; once releases begin, only the latest minor version will receive security patches. The binary currently performs no network operations; the network surface (downloads behind `install` / `update` / `search`) will follow the HTTPS-only goal below.
 
 | Version | Supported |
 | ------- | --------- |
