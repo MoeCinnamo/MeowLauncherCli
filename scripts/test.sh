@@ -81,8 +81,11 @@ LANG=zh_TW.UTF-8 "$BIN" | grep -q "Usage: meowlaunchcli" \
 
 # 10. Unit tests: each tests/<module>/test_*.c links against its own module.
 echo "[INFO] Unit tests..."
+# Rebuild the default all-languages binary: steps 8-9 rebuilt with reduced
+# LANGS, which would leave the unit tests without the zh-TW archive.
+"$PROJECT_ROOT/scripts/build.sh" >/dev/null
 CC="${CC:-cc}"
-CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -I.}"
+CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L -I.}"
 for test_src in tests/*/test_*.c; do
     mod="$(basename "$(dirname "$test_src")")"
     unit_bin="$out_dir/test_${mod}${bin_suffix}"

@@ -2,6 +2,16 @@
 
 Newest record on top.
 
+## 2026-10-24 Fix CI warnings and unit-test failure
+
+- **Reason**: CI surfaced three issues: unused `lang` in single-language
+  builds, implicit `setenv` declaration, and the zh-TW unit test failing
+  because steps 8-9 left the generated header without the zh archive.
+- **Trade-off**: `lang` is guarded by `#if defined(...Z_TW)||...JA_JP)`;
+  unit-test CFLAGS carry `-D_POSIX_C_SOURCE=200809L`; test.sh rebuilds the
+  default all-languages binary right before compiling unit tests.
+- **Risk**: None.
+
 ## 2026-10-24 Warnings zeroed, per-module unit tests, dual-platform CI
 
 - **Reason**: Fix CI warnings (`-Wcomment`, `-Waddress`), move unit tests

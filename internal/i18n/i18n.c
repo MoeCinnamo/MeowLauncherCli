@@ -112,7 +112,12 @@ static const char *find_value(const char *start, const char *end,
 
 void I18n_Init(void)
 {
+#if defined(LANG_JSON_ZH_TW) || defined(LANG_JSON_JA_JP)
     const char *lang = getenv("LANG");
+#else
+    /* Single-language build: no locale-sensitive branch below. */
+    const char *lang = NULL;
+#endif
 
 #ifdef LANG_JSON_EN
     /* Multi-language build: English is the fallback; the system locale
