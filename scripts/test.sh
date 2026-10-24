@@ -87,8 +87,13 @@ echo "[INFO] Unit tests..."
 # LANGS, which would leave the unit tests without the zh-TW archive.
 "$PROJECT_ROOT/scripts/build.sh" >/dev/null
 rm -f "$out_dir"/*.gcda 2>/dev/null || true
+# Exercise the final coverage binary once: the gcda we just deleted belongs
+# to this build, and gcovr needs it before generating the report.
+"$BIN" help >/dev/null
+"$BIN" version >/dev/null
 CC="${CC:-cc}"
 CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L -I.}"
+[ "${COVERAGE:-0}" = "1" ] && CFLAGS="$CFLAGS --coverage"
 for test_src in tests/*/test_*.c; do
     mod="$(basename "$(dirname "$test_src")")"
     unit_bin="$out_dir/test_${mod}${bin_suffix}"

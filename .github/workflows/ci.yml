@@ -1,6 +1,5 @@
 name: test
 
-# Explicit least-privilege token permissions (no implicit read/write default).
 permissions:
   contents: read
   id-token: write
@@ -11,7 +10,7 @@ on:
   pull_request:
 
 jobs:
-  test:
+  test-and-coverage:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -44,8 +43,120 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
 
-  test-windows:
-    runs-on: windows-latest
+  test-on-alpine-3_24_3:
+    runs-on: ubuntu-latest
+    container:
+      image: alpine:3.24.3
+    steps:
+      - name: Install dependencies
+        run: |
+          echo "http://dl-cdn.alpinelinux.org/alpine/v3.24/main" > /etc/apk/repositories
+          echo "http://dl-cdn.alpinelinux.org/alpine/v3.24/community" >> /etc/apk/repositories
+          apk update --no-cache
+          apk upgrade --no-cache
+          apk add --no-cache \
+          sudo bash zsh build-base gcc make pkgconf fontconfig fontconfig-dev \
+          git git-lfs nodejs npm lcov gzip libpng-dev curl
+      - uses: actions/checkout@v4
+      - name: Build and smoke test
+        run: |
+          chmod 755 * .* -R
+          ./scripts/test.sh
+
+  test-on-ubuntu-22_04-arm:
+    runs-on: ubuntu-22.04-arm
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and smoke test
+        run: |
+          chmod 755 * .* -R
+          ./scripts/test.sh
+
+  test-on-ubuntu-22_04:
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and smoke test
+        run: |
+          chmod 755 * .* -R
+          ./scripts/test.sh
+  
+  test-on-ubuntu-24_04-arm:
+    runs-on: ubuntu-24.04-arm
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and smoke test
+        run: |
+          chmod 755 * .* -R
+          ./scripts/test.sh
+
+  test-on-ubuntu-24_04:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and smoke test
+        run: |
+          chmod 755 * .* -R
+          ./scripts/test.sh
+
+  test-on-ubuntu-26_04-arm:
+    runs-on: ubuntu-26.04-arm
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and smoke test
+        run: |
+          chmod 755 * .* -R
+          ./scripts/test.sh
+
+  test-on-ubuntu-26_04:
+    runs-on: ubuntu-26.04
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and smoke test
+        run: |
+          chmod 755 * .* -R
+          ./scripts/test.sh
+
+  test-windows-server-2025:
+    runs-on: windows-2025
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and smoke test (MinGW)
+        run: ./scripts/test.sh
+
+  test-windows-server-2022:
+    runs-on: windows-2022
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and smoke test (MinGW)
+        run: ./scripts/test.sh
+
+  test-windows-11-arm:
+    runs-on: windows-11-arm
     defaults:
       run:
         shell: bash
