@@ -10,7 +10,6 @@
     "cmd_update": "更新遊戲來源",
     "cmd_search": "搜尋遊戲、載入器、模組、資源包、整合包版本",
     "cmd_game": "管理和切換遊戲版本",
-    "cmd_launch": "啟動遊戲版本",
     "cmd_mod": "管理模組（目前遊戲版本）",
     "cmd_account": "管理帳號",
     "cmd_world": "管理世界（目前遊戲版本）",
@@ -21,12 +20,22 @@
   "error": {
     "unknown_command": "未知指令：%s"
   },
+  "game": {
+    "usage": "用法：meowlaunchcli game <help|switch|current|show>",
+    "help": {
+      "title": "遊戲版本管理：",
+      "switch": "切換遊戲版本",
+      "current": "顯示目前遊戲版本",
+      "show": "列出已安裝遊戲版本"
+    }
+  },
   "account": {
     "usage": "用法：meowlaunchcli account local <add|del> <使用者名稱>",
     "help": {
       "title": "帳號管理：",
-      "local_add": "account local add <使用者>   新增本機離線帳號",
-      "local_del": "account local del <使用者>   移除本機離線帳號"
+      "local_add": "新增本機離線帳號",
+      "local_del": "移除本機離線帳號",
+      "local_show": "列出本機帳號"
     },
     "added": "已新增本機帳號：%s",
     "removed": "已移除本機帳號：%s",

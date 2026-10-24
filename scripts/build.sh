@@ -50,7 +50,7 @@ case "$uname_s" in
         LDFLAGS="${LDFLAGS:-}"
         ;;
 esac
-CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L -I.}"
+CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L -D_DEFAULT_SOURCE -I.}"
 
 # Git build identifier embedded into the "version" subcommand: the full
 # commit hash (e.g. aca57ce8859ca4faa5d31f079e370108832d640d).

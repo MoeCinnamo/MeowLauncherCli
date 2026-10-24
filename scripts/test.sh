@@ -30,7 +30,7 @@ test_dir="$PROJECT_ROOT/build_test"
 mkdir -p "$test_dir"
 
 CC="${CC:-gcc}"
-CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L -I.}"
+CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L -D_DEFAULT_SOURCE -I.}"
 [ "${COVERAGE:-0}" = "1" ] && CFLAGS="$CFLAGS --coverage"
 GIT_VERSION="${GIT_VERSION:-$(git rev-parse HEAD 2>/dev/null || echo unknown)}"
 CFLAGS="$CFLAGS -DGIT_VERSION=\"$GIT_VERSION\""
@@ -169,7 +169,7 @@ rebuild ""
 if [ -z "${CC:-}" ]; then
     if command -v gcc >/dev/null 2>&1; then CC="gcc"; else CC="cc"; fi
 fi
-CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L -I.}"
+CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L -D_DEFAULT_SOURCE -I.}"
 [ "${COVERAGE:-0}" = "1" ] && CFLAGS="$CFLAGS --coverage"
 GIT_VERSION="${GIT_VERSION:-$(git rev-parse HEAD 2>/dev/null || echo unknown)}"
 CFLAGS="$CFLAGS -DGIT_VERSION=\"$GIT_VERSION\""

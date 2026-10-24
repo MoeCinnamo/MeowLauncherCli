@@ -20,6 +20,7 @@ meowlaunchcli version    # 顯示版本
 
 另見：
 - [帳號管理](account.md)
+- [遊戲版本切換](game.md)
 
-其他指令（install、remove、update、search、game、launch、mod、world、
+其他指令（install、remove、update、search、game、mod、world、
 resource、config）尚在開發中。

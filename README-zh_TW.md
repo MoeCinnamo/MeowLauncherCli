@@ -32,10 +32,9 @@ meowlaunchcli <command>  # 執行子指令
 | `remove`   | 移除遊戲、模組載入器、模組、資源包、整合包 |
 | `update`   | 更新遊戲來源 |
 | `search`   | 搜尋遊戲、載入器、模組、資源包、整合包版本 |
-| `game`     | 管理和切換遊戲版本 |
-| `launch`   | 啟動遊戲版本 |
+| `game`     | 管理和切換遊戲版本（`game help/switch/current/show`） |
 | `mod`      | 管理模組（目前遊戲版本） |
-| `account`  | 管理帳號（`account local add/del <使用者>`） |
+| `account`  | 管理帳號（`account local add/del/show <使用者>`） |
 | `world`    | 管理世界（目前遊戲版本） |
 | `resource` | 管理資源包（目前遊戲版本） |
 | `config`   | 設定 |
@@ -61,7 +60,8 @@ Windows（MSYS2/MinGW）下同一支腳本使用 `gcc`，產出 `meowlaunchcli.e
 
 ## 現況
 
-開發初期。`help`、`version` 與 `account local add/del` 已實作，其餘指令正以模組為單位逐步落地。
+開發初期。`help`、`version`、`account local add/del/show` 與
+`game help/switch/current/show` 已實作，其餘指令正以模組為單位逐步落地。
 
 ## 文件
 

@@ -1,6 +1,6 @@
 # Account management
 
-MeowLauncherCli stores local offline accounts under `~/.meowlaunch/data/users.json`.
+MeowLauncherCli stores local offline accounts under `<exedir>/.meowlaunch/data/users.json`.
 
 ## Add a local account
 
@@ -21,6 +21,14 @@ meowlaunchcli account local del <username>
 
 Removes the matching entry. Prints "Account not found" when no match.
 
+## List local accounts
+
+```
+meowlaunchcli account local show
+```
+
+Prints each local account name on its own line.
+
 ## Storage layout
 
 ```json
@@ -31,4 +39,4 @@ Removes the matching entry. Prints "Account not found" when no match.
 }
 ```
 
-Windows path: `C:\Users\<you>\.meowlaunch\data\users.json`.
+Path: `<exedir>/.meowlaunch/data/users.json`.

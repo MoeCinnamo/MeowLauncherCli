@@ -13,4 +13,7 @@ int Account_Local_Add(const char *name);
  * the account does not exist. */
 int Account_Local_Del(const char *name);
 
+/* List all local accounts. Returns 0 on success. */
+int Account_Local_Show(void);
+
 #endif

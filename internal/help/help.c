@@ -22,7 +22,6 @@ void Help_Print(void)
     printf("  %-10s %s\n", "update",   I18n("help.cmd_update"));
     printf("  %-10s %s\n", "search",   I18n("help.cmd_search"));
     printf("  %-10s %s\n", "game",     I18n("help.cmd_game"));
-    printf("  %-10s %s\n", "launch",   I18n("help.cmd_launch"));
     printf("  %-10s %s\n", "mod",      I18n("help.cmd_mod"));
     printf("  %-10s %s\n", "account",  I18n("help.cmd_account"));
     printf("  %-10s %s\n", "world",    I18n("help.cmd_world"));

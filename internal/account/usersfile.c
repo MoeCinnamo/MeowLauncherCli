@@ -48,9 +48,9 @@ int usersfile_path(char *buf, size_t bufsz)
         return -1;
     }
 #ifdef _WIN32
-    return snprintf(buf, bufsz, "%s\\data\\users.json", dir) < 0;
+    return snprintf(buf, bufsz, "%s\\.meowlaunch\\data\\users.json", dir) < 0;
 #else
-    return snprintf(buf, bufsz, "%s/data/users.json", dir) < 0;
+    return snprintf(buf, bufsz, "%s/.meowlaunch/data/users.json", dir) < 0;
 #endif
 }
 

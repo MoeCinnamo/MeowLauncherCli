@@ -32,10 +32,9 @@ meowlaunchcli <command>  # dispatch a subcommand
 | `remove`   | Remove game, mod loaders, mods, packs, modpacks |
 | `update`   | Refresh game metadata sources |
 | `search`   | Search available game / loader / mod / pack versions |
-| `game`     | Manage and switch game versions |
-| `launch`   | Launch the game |
+| `game`     | Manage and switch game versions (`game help/switch/current/show`) |
 | `mod`      | Manage mods (current game version) |
-| `account`  | Manage accounts (`account local add/del <user>`) |
+| `account`  | Manage accounts (`account local add/del/show <user>`) |
 | `world`    | Manage worlds (current game version) |
 | `resource` | Manage resource packs (current game version) |
 | `config`   | Show or edit configuration |
@@ -61,8 +60,9 @@ Copy `config.json.example` to `config.json` and adjust it to your needs.
 
 ## Status
 
-Early development. `help`, `version` and `account local add/del` are
-implemented; the remaining commands land module by module.
+Early development. `help`, `version`, `account local add/del/show`, and
+`game help/switch/current/show` are implemented; remaining commands land
+module by module.
 
 ## Documentation
 

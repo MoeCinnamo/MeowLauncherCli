@@ -22,6 +22,11 @@ static int failures = 0;
 
 int main(void)
 {
+    /* Wipe any leftover users.json next to the test binary (build_test/). */
+    remove("build_test/.meowlaunch/data/users.json");
+    remove("build_test/.meowlaunch/data");
+    remove("build_test/.meowlaunch");
+
     CHECK(Account_Local_Add("alice") == 0, "add alice succeeds");
     CHECK(Account_Local_Add("bob") == 0, "add bob succeeds");
     CHECK(Account_Local_Add("alice") != 0, "duplicate add rejected");
@@ -33,6 +38,8 @@ int main(void)
     CHECK(Account_Local_Add(NULL) != 0, "add NULL name fails");
     CHECK(Account_Local_Del("") != 0, "del empty name fails");
     CHECK(Account_Local_Del(NULL) != 0, "del NULL name fails");
+
+    CHECK(Account_Local_Show() == 0, "account local show runs");
 
     return failures ? 1 : 0;
 }

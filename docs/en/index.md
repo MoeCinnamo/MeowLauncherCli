@@ -20,6 +20,7 @@ meowlaunchcli version    # print version
 
 See also:
 - [Account management](account.md)
+- [Game version switching](game.md)
 
-More commands (install, remove, update, search, game, launch, mod, world,
+More commands (install, remove, update, search, game, mod, world,
 resource, config) are planned.

@@ -20,6 +20,7 @@ meowlaunchcli version    # バージョンを表示
 
 関連:
 - [アカウント管理](account.md)
+- [ゲームバージョン切り替え](game.md)
 
-その他のコマンド（install、remove、update、search、game、launch、mod、
+その他のコマンド（install、remove、update、search、game、mod、
 world、resource、config）は開発中です。

@@ -10,7 +10,6 @@
     "cmd_update": "ゲーム情報ソースを更新",
     "cmd_search": "ゲーム・ローダー・mod・パックのバージョンを検索",
     "cmd_game": "ゲームバージョンを管理・切り替え",
-    "cmd_launch": "ゲームを起動",
     "cmd_mod": "mod を管理（現在のゲームバージョン）",
     "cmd_account": "アカウントを管理",
     "cmd_world": "ワールドを管理（現在のゲームバージョン）",
@@ -21,12 +20,22 @@
   "error": {
     "unknown_command": "不明なコマンド: %s"
   },
+  "game": {
+    "usage": "使い方: meowlaunchcli game <help|switch|current|show>",
+    "help": {
+      "title": "ゲームバージョン管理:",
+      "switch": "ゲームバージョンを切り替え",
+      "current": "現在のバージョンを表示",
+      "show": "インストール済みバージョンを一覧"
+    }
+  },
   "account": {
     "usage": "使い方: meowlaunchcli account local <add|del> <ユーザー名>",
     "help": {
       "title": "アカウント管理:",
-      "local_add": "account local add <ユーザー>   ローカルアカウントを追加",
-      "local_del": "account local del <ユーザー>   ローカルアカウントを削除"
+      "local_add": "ローカルアカウントを追加",
+      "local_del": "ローカルアカウントを削除",
+      "local_show": "ローカルアカウント一覧"
     },
     "added": "ローカルアカウントを追加しました: %s",
     "removed": "ローカルアカウントを削除しました: %s",

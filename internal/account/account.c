@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "internal/account/account.h"
 #include "internal/account/private.h"
@@ -71,5 +72,27 @@ int Account_Local_Del(const char *name)
     free(buf);
     printf(I18n("account.removed"), name);
     printf("\n");
+    return 0;
+}
+
+int Account_Local_Show(void)
+{
+    char path[1024];
+    char *buf;
+    if (usersfile_path(path, sizeof path) != 0) return 1;
+    buf = usersfile_load(path);
+    if (buf == NULL) return 1;
+    /* Walk the users array and print each name. */
+    const char *p = buf;
+    while ((p = strstr(p, "\"name\":")) != NULL) {
+        p += 7;
+        while (*p == ' ' || *p == '\t') p++;
+        if (*p != '"') continue;
+        p++;
+        const char *start = p;
+        while (*p && *p != '"') p++;
+        printf("%.*s\n", (int)(p - start), start);
+    }
+    free(buf);
     return 0;
 }

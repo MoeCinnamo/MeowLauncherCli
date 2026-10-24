@@ -2,6 +2,29 @@
 
 Newest record on top.
 
+## 2026-10-24 game/account subcommands, help, i18n
+
+- **Reason**: Need `game help/switch/current/show` and `account local show`;
+  versions live as directories under `.minecraft/versions/`; `launch` removed.
+- **Decisions**:
+  - `internal/game/game.c`: `Game_Switch(ver)` writes `.meowlaunch/config.json`;
+    `Game_Current()` reads it; `Game_Show()` lists `.minecraft/versions/` dirs
+    via `FindFirstFileA` on Windows, `opendir/readdir` on Linux.
+  - `internal/game/help.c`: `Game_Help()` prints switch/current/show.
+  - `Account_Local_Show()` walks users.json and prints names.
+  - main.c dispatches `game help/switch/current/show` and `account local
+    add/del/show/help`.
+  - Removed `cmd_launch` from lang/*.json, help.c, READMEs.
+  - lang: `game.help.{title,switch,current,show}` and
+    `account.help.local_show` in en/zh-TW/ja-JP; descriptions are plain text,
+    command prefixes hardcoded in help.c.
+  - Tests cover show/current/missing-config/missing-dir; test_account wipes
+    `build_test/.meowlaunch/` before running (exe-relative path).
+  - Docs: `docs/{en,zh-TW,ja-JP}/{account,game}.md` updated with local_show,
+    game help/switch/current/show, and `<exedir>/.meowlaunch/` paths; root
+    READMEs updated command tables and status.
+- **Trade-off**: None.
+
 ## 2026-10-24 Data path next to executable
 
 - **Reason**: User wants `users.json` alongside the binary, not under

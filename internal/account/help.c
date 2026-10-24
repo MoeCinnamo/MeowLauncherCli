@@ -10,6 +10,7 @@
 void Account_Help(void)
 {
     printf("%s\n", I18n("account.help.title"));
-    printf("  %s\n", I18n("account.help.local_add"));
-    printf("  %s\n", I18n("account.help.local_del"));
+    printf("  %-32s %s\n", "account local add <user>", I18n("account.help.local_add"));
+    printf("  %-32s %s\n", "account local del <user>", I18n("account.help.local_del"));
+    printf("  %-32s %s\n", "account local show", I18n("account.help.local_show"));
 }

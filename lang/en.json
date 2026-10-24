@@ -10,7 +10,6 @@
     "cmd_update": "Refresh game metadata sources",
     "cmd_search": "Search available game / loader / mod / pack versions",
     "cmd_game": "Manage and switch game versions",
-    "cmd_launch": "Launch the game",
     "cmd_mod": "Manage mods (current game version)",
     "cmd_account": "Manage accounts",
     "cmd_world": "Manage worlds (current game version)",
@@ -21,12 +20,22 @@
   "error": {
     "unknown_command": "Unknown command: %s"
   },
+  "game": {
+    "usage": "Usage: meowlaunchcli game <help|switch|current|show>",
+    "help": {
+      "title": "Game version management:",
+      "switch": "Switch to a game version",
+      "current": "Show current game version",
+      "show": "List installed game versions"
+    }
+  },
   "account": {
     "usage": "Usage: meowlaunchcli account local <add|del> <username>",
     "help": {
       "title": "Account management:",
-      "local_add": "account local add <user>   Add a local offline account",
-      "local_del": "account local del <user>   Remove a local offline account"
+      "local_add": "Add a local offline account",
+      "local_del": "Remove a local offline account",
+      "local_show": "List local accounts"
     },
     "added": "Added local account: %s",
     "removed": "Removed local account: %s",
