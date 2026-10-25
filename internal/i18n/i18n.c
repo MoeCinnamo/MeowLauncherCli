@@ -14,7 +14,6 @@
 #include <string.h>
 #include <ctype.h>
 
-#if !defined(__GLIBC__)
 static char *strcasestr(const char *hay, const char *needle)
 {
     size_t nlen = strlen(needle);
@@ -28,7 +27,6 @@ static char *strcasestr(const char *hay, const char *needle)
     }
     return NULL;
 }
-#endif
 
 #include "internal/i18n/i18n.h"
 #include "internal/i18n/gen/lang_embedded.h"

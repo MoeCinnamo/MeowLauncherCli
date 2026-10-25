@@ -265,9 +265,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build and smoke test (clang)
-        run: |
-          chmod 755 * .* -R
-          ./scripts/test.sh
+        run: ./scripts/test.sh
 
   test-macos-15-arm:
     runs-on: macos-15
@@ -277,9 +275,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build and smoke test (clang)
-        run: |
-          chmod 755 * .* -R
-          ./scripts/test.sh
+        run: ./scripts/test.sh
 
   test-macos-26:
     runs-on: macos-26-intel
@@ -289,9 +285,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build and smoke test (clang)
-        run: |
-          chmod 755 * .* -R
-          ./scripts/test.sh
+        run: ./scripts/test.sh
 
   test-macos-26-arm:
     runs-on: macos-26
@@ -301,6 +295,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build and smoke test (clang)
-        run: |
-          chmod 755 * .* -R
-          ./scripts/test.sh
+        run: ./scripts/test.sh
