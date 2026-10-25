@@ -1,2 +1,7 @@
 * text=auto eol=lf
+*.sh text eol=lf
+scripts/* text eol=lf
 *.bat text eol=crlf
+*.exe binary
+*.sh executable
+scripts/* executable
