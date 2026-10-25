@@ -5,6 +5,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#ifndef _WIN32
+#include <unistd.h>
+#endif
 
 #include "internal/account/account.c"
 #include "internal/account/uuid.c"
@@ -45,17 +49,17 @@ int main(void)
     remove("build_test/.meowlaunch/data/users.json");
     CHECK(Account_Local_Show() == 0, "show with no users.json");
 
-    /* Read-only data dir: usersfile_save fails. */
+    /* Read-only data dir: usersfile_save fails (skip when running as root). */
 #ifdef _WIN32
     system("attrib +r build_test\\.meowlaunch\\data >nul 2>&1");
-#else
-    chmod("build_test/.meowlaunch/data", 0o555);
-#endif
     CHECK(Account_Local_Add("readonly") != 0, "add to read-only dir fails");
-#ifdef _WIN32
     system("attrib -r build_test\\.meowlaunch\\data >nul 2>&1");
 #else
-    chmod("build_test/.meowlaunch/data", 0o755);
+    if (getuid() != 0) {
+        chmod("build_test/.meowlaunch/data", 0555);
+        CHECK(Account_Local_Add("readonly") != 0, "add to read-only dir fails");
+        chmod("build_test/.meowlaunch/data", 0755);
+    }
 #endif
 
     return failures ? 1 : 0;

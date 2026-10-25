@@ -2,6 +2,18 @@
 
 Newest record on top.
 
+## 2026-10-25 read-only dir test, zh_HK locale, coverage fixes
+
+- **Reason**: CI runs as root so chmod doesn't block writes; `0o` prefix is
+  Python octal not C; need zh_HK locale entry.
+- **Decisions**:
+  - test_account skips read-only dir test when running as root (`getuid()==0`).
+  - Use C octal `0555`/`0755` not `0o555`/`0o755`.
+  - Added `lang/zh-HK.json`, `README-zh_HK.md`, `docs/zh-HK/`.
+  - i18n prefix is full locale tag (`zh_TW`, `ja_JP`, `zh_HK`) so `zh_CN`
+    falls back to English.
+- **Trade-off**: None.
+
 ## 2026-10-25 strict locale, CRLF→LF, CC env override
 
 - **Reason**: Windows mojibake with non-UTF-8 locales; need LF on commit;
