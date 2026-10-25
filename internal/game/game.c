@@ -8,29 +8,13 @@
 
 #include "internal/json/json.h"
 #include "internal/i18n/i18n.h"
-#include "internal/paths/paths.h"
-
-#ifdef _WIN32
-#include <windows.h>
-#include <dirent.h>
-#include <sys/stat.h>
-#elif defined(__APPLE__)
-#include <dirent.h>
-#include <sys/stat.h>
-#else
-#include <dirent.h>
-#include <sys/stat.h>
-#endif
+#include "internal/platform/platform.h"
 
 static int config_path(char *buf, size_t bufsz)
 {
     char dir[1024];
-    if (ExeDir(dir, sizeof dir) != 0) return -1;
-#ifdef _WIN32
-    return snprintf(buf, bufsz, "%s\\.meowlaunch\\config.json", dir) < 0;
-#else
-    return snprintf(buf, bufsz, "%s/.meowlaunch/config.json", dir) < 0;
-#endif
+    if (Plat_ExeDir(dir, sizeof dir) != 0) return -1;
+    return Plat_Join(buf, bufsz, dir, ".meowlaunch/config.json");
 }
 
 /* Set the current game version. Returns 0 on success. */
@@ -86,42 +70,25 @@ int Game_Current(void)
 int Game_Show(void)
 {
     char ex[1024];
-    if (ExeDir(ex, sizeof ex) != 0) return 1;
-#ifdef _WIN32
-    char pattern[4096];
-    snprintf(pattern, sizeof pattern, "%s\\.minecraft\\versions\\*", ex);
-    WIN32_FIND_DATAA fd;
-    HANDLE h = FindFirstFileA(pattern, &fd);
-    if (h == INVALID_HANDLE_VALUE) {
-        printf("(no versions directory)\n");
-        return 0;
-    }
-    do {
-        if (fd.cFileName[0] == '.') continue;
-        if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-            printf("%s\n", fd.cFileName);
-        }
-    } while (FindNextFileA(h, &fd));
-    FindClose(h);
-#else
     char dir[4096];
-    snprintf(dir, sizeof dir, "%s/.minecraft/versions", ex);
-    DIR *d = opendir(dir);
+    plat_dir_t *d;
+    const char *name;
+
+    if (Plat_ExeDir(ex, sizeof ex) != 0) return 1;
+    if (Plat_Join(dir, sizeof dir, ex, ".minecraft/versions") != 0) return 1;
+    d = Plat_Dir_Open(dir);
     if (d == NULL) {
         printf("(no versions directory)\n");
         return 0;
     }
-    struct dirent *e;
-    while ((e = readdir(d)) != NULL) {
-        if (e->d_name[0] == '.') continue;
+    while (Plat_Dir_Next(d, &name) > 0) {
+        if (name[0] == '.') continue;
         char full[8192];
-        snprintf(full, sizeof full, "%s/%s", dir, e->d_name);
-        struct stat st;
-        if (stat(full, &st) == 0 && S_ISDIR(st.st_mode)) {
-            printf("%s\n", e->d_name);
+        if (Plat_Join(full, sizeof full, dir, name) != 0) continue;
+        if (Plat_IsDir(full)) {
+            printf("%s\n", name);
         }
     }
-    closedir(d);
-#endif
+    Plat_Dir_Close(d);
     return 0;
 }

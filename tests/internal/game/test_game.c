@@ -8,7 +8,7 @@
 #include <sys/stat.h>
 
 #include "internal/game/game.c"
-#include "internal/paths/paths.c"
+#include "internal/platform/platform.c"
 #include "internal/json/json_io.c"
 #include "internal/json/json_walk.c"
 #include "internal/json/json_escape.c"

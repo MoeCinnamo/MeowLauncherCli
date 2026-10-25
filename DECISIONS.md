@@ -2,6 +2,42 @@
 
 Newest record on top.
 
+## 2026-10-25 platform rmdir + test clean-slate fix
+
+- **Reason**: `tests/internal/platform/test_platform.c` cleared the
+  `build_test/plat_tmp` slate with `remove()`, which maps to `_unlink()` on
+  Windows and cannot delete directories. The directory left behind by a
+  previous run made `Plat_Mkdir` return EEXIST, so `Mkdir creates` failed on
+  re-runs. POSIX `remove()` removes empty directories, so Alpine CI never
+  caught the failure.
+- **Decisions**:
+  - New `Plat_Rmdir()` in the platform layer (`_rmdir` on Windows, `rmdir`
+    on POSIX), mirroring `Plat_Mkdir`.
+  - test_platform.c clean-slate cleanup removes the file with `remove()` and
+    the directory with `Plat_Rmdir()`.
+- **Trade-off**: None.
+
+## 2026-10-25 platform adaptation layer
+
+- **Reason**: `#ifdef _WIN32`/`__APPLE__` blocks were embedded in business
+  functions (Game_Show directory listing, config_path/usersfile_path path
+  separators, json_io MKDIR), mixing platform concerns into business logic.
+- **Decisions**:
+  - New `internal/platform/platform.{c,h}`: `Plat_ExeDir`, `Plat_Join`,
+    `Plat_Mkdir`, `Plat_Dir_Open/Next/Close`, `Plat_IsDir`; all OS-specific
+    code confined to platform.c. Exported names capital-first, statics
+    lowercase.
+  - `internal/paths/` removed; `ExeDir` moved to the platform layer as
+    `Plat_ExeDir`.
+  - game.c / usersfile.c / config_common.c / json_io.c call the platform
+    API; no `#ifdef` remains in business modules.
+  - Tests: `tests/internal/paths/test_paths.c` replaced by
+    `tests/internal/platform/test_platform.c`; affected tests include
+    platform.c instead of paths.c.
+- **Trade-off**: Directory iteration goes through a small opaque iterator
+  instead of bare opendir/FindFirstFileA; paths.c removed (one module
+  fewer).
+
 ## 2026-10-25 JSON injection fix
 
 - **Reason**: `Game_Switch` concatenated the user-supplied version into a

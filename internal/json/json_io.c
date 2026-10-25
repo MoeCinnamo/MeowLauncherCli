@@ -4,17 +4,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-
-#ifdef _WIN32
-#include <direct.h>
-#define MKDIR(p) _mkdir(p)
-#else
-#define MKDIR(p) mkdir((p), 0755)
-#endif
 
 #include "internal/json/json.h"
+#include "internal/platform/platform.h"
 
 char *Json_Load(const char *path)
 {
@@ -53,7 +45,7 @@ int Json_Save(const char *path, const char *buf)
         if (*p == '/' || *p == '\\') {
             char c = *p;
             *p = '\0';
-            MKDIR(tmp);
+            Plat_Mkdir(tmp); /* may already exist; failure is expected */
             *p = c;
         }
     }

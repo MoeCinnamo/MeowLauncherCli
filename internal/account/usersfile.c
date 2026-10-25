@@ -9,31 +9,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef _WIN32
-#include <windows.h>
-#elif defined(__APPLE__)
-#include <mach-o/dyld.h>
-#include <libgen.h>
-#else
-#include <unistd.h>
-#include <libgen.h>
-#endif
-
 #include "internal/json/json.h"
 #include "internal/account/private.h"
-#include "internal/paths/paths.h"
+#include "internal/platform/platform.h"
 
 int usersfile_path(char *buf, size_t bufsz)
 {
     char dir[1024];
-    if (ExeDir(dir, sizeof dir) != 0) {
+    if (Plat_ExeDir(dir, sizeof dir) != 0) {
         return -1;
     }
-#ifdef _WIN32
-    return snprintf(buf, bufsz, "%s\\.meowlaunch\\data\\users.json", dir) < 0;
-#else
-    return snprintf(buf, bufsz, "%s/.meowlaunch/data/users.json", dir) < 0;
-#endif
+    return Plat_Join(buf, bufsz, dir, ".meowlaunch/data/users.json");
 }
 
 char *usersfile_load(const char *path)

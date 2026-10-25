@@ -6,7 +6,7 @@
 #include "internal/config/config_commands.c"
 #include "internal/config/config_gfx.c"
 #include "internal/config/config_help.c"
-#include "internal/paths/paths.c"
+#include "internal/platform/platform.c"
 #include "internal/json/json_io.c"
 #include "internal/json/json_walk.c"
 

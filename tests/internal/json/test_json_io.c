@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include "internal/json/json_io.c"
+#include "internal/platform/platform.c"
 
 static int malloc_fail_at = -1;
 static int malloc_calls = 0;

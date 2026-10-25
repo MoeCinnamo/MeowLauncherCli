@@ -8,6 +8,7 @@
 #include "internal/i18n/i18n.c"
 #include "internal/json/json_io.c"
 #include "internal/json/json_walk.c"
+#include "internal/platform/platform.c"
 #include "internal/game/help.c"
 
 static int failures = 0;

@@ -112,10 +112,22 @@ int main(void)
     rc = run_capture(cmd, buf, sizeof buf);
     CHECK(rc == 0, "game show exits 0");
 
+    /* game switch with no version: falls back to Game_Current(). */
+    snprintf(cmd, sizeof cmd, "%s game switch 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "game switch bare exits 0");
+
     /* config help: exits 0. */
     snprintf(cmd, sizeof cmd, "%s config help 2>&1", bin);
     rc = run_capture(cmd, buf, sizeof buf);
     CHECK(rc == 0, "config help exits 0");
+
+    /* config with unknown subcommand: prints usage, exits nonzero. */
+    snprintf(cmd, sizeof cmd, "%s config bogus 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc != 0, "config bogus exits nonzero");
+    CHECK(strstr(buf, "config java") != NULL,
+          "config bogus prints usage");
 
     /* config java set/show. */
     snprintf(cmd, sizeof cmd, "%s config java 21 2>&1", bin);
@@ -144,6 +156,29 @@ int main(void)
     snprintf(cmd, sizeof cmd, "%s config gfx opengl 2>&1", bin);
     rc = run_capture(cmd, buf, sizeof buf);
     CHECK(rc == 0, "config gfx set exits 0");
+
+    /* config bare-arg variants: defaults, empty values, show paths. */
+    snprintf(cmd, sizeof cmd, "%s config memory 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "config memory bare exits 0");
+    snprintf(cmd, sizeof cmd, "%s config memory auto 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "config memory auto exits 0");
+    snprintf(cmd, sizeof cmd, "%s config window windowed 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "config window defaults exits 0");
+    snprintf(cmd, sizeof cmd, "%s config args 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "config args bare exits 0");
+    snprintf(cmd, sizeof cmd, "%s config precmd 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "config precmd bare exits 0");
+    snprintf(cmd, sizeof cmd, "%s config postcmd 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "config postcmd bare exits 0");
+    snprintf(cmd, sizeof cmd, "%s config gfx 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "config gfx show exits 0");
 
     return failures ? 1 : 0;
 }

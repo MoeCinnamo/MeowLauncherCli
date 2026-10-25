@@ -7,18 +7,14 @@
 #include <string.h>
 
 #include "internal/json/json.h"
-#include "internal/paths/paths.h"
+#include "internal/platform/platform.h"
 #include "internal/config/config.h"
 
 int config_path(char *buf, size_t bufsz)
 {
     char dir[1024];
-    if (ExeDir(dir, sizeof dir) != 0) return -1;
-#ifdef _WIN32
-    return snprintf(buf, bufsz, "%s\\.meowlaunch\\config.json", dir) < 0;
-#else
-    return snprintf(buf, bufsz, "%s/.meowlaunch/config.json", dir) < 0;
-#endif
+    if (Plat_ExeDir(dir, sizeof dir) != 0) return -1;
+    return Plat_Join(buf, bufsz, dir, ".meowlaunch/config.json");
 }
 
 void config_read_str(const char *key, const char *def, char *out, size_t outsz)
