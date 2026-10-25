@@ -69,7 +69,8 @@ if [ -n "${LANGS:-}" ]; then
     wanted=()
     for l in $LANGS; do wanted+=("$PROJECT_ROOT/lang/$l.json"); done
 else
-    mapfile -t wanted < <(find "$PROJECT_ROOT/lang" -maxdepth 1 -name '*.json' | sort)
+    wanted=()
+    while IFS= read -r f; do wanted+=("$f"); done < <(find "$PROJECT_ROOT/lang" -maxdepth 1 -name '*.json' | sort)
 fi
 
 # English (or the first file) is always emitted first: it is the runtime
@@ -103,7 +104,8 @@ wanted=("${ordered[@]}")
 } > "$gen_header"
 
 # Collect every translation unit of the product (tests/ are not part of it).
-mapfile -t SOURCES < <(find . -name '*.c' -not -path './.git/*' -not -path './tests/*')
+SOURCES=()
+while IFS= read -r f; do SOURCES+=("$f"); done < <(find . -name '*.c' -not -path './.git/*' -not -path './tests/*')
 
 echo "[INFO] Platform=$uname_s CC=$CC GIT_VERSION=$GIT_VERSION LANGS='${LANGS:-en zh-TW ja-JP}'"
 echo "[INFO] Sources: ${SOURCES[*]}"
@@ -126,7 +128,7 @@ for src in "${SOURCES[@]}"; do
     obj="$obj_dir/$(echo "$src" | sed 's|/|_|g;s|\.c$|.o|')"
     objs+=("$obj")
 done
-njobs="$(nproc 2>/dev/null || echo 4)"
+njobs="$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)"
 # shellcheck disable=SC2086
 printf '%s\n' "${SOURCES[@]}" | CC="$CC" CFLAGS="$CFLAGS" GIT_VERSION="$GIT_VERSION" obj_dir="$obj_dir" \
     xargs -P "$njobs" -I{} sh -c \

@@ -26,9 +26,7 @@ jobs:
           git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr
       - uses: actions/checkout@v4
       - name: Build and smoke test
-        run: |
-          chmod 755 * .* -R
-          ./scripts/test.sh
+        run: ./scripts/test.sh
       - name: Coverage build and report
         env:
           CC: gcc
@@ -67,9 +65,7 @@ jobs:
           git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr
       - uses: actions/checkout@v4
       - name: Build and smoke test
-        run: |
-          chmod 755 * .* -R
-          ./scripts/test.sh
+        run: ./scripts/test.sh
   
   test-on-alpine-3_23_7:
     runs-on: ubuntu-latest
@@ -87,9 +83,7 @@ jobs:
           git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr
       - uses: actions/checkout@v4
       - name: Build and smoke test
-        run: |
-          chmod 755 * .* -R
-          ./scripts/test.sh
+        run: ./scripts/test.sh
 
   test-on-alpine-3_22_7:
     runs-on: ubuntu-latest
@@ -107,9 +101,7 @@ jobs:
           git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr
       - uses: actions/checkout@v4
       - name: Build and smoke test
-        run: |
-          chmod 755 * .* -R
-          ./scripts/test.sh
+        run: ./scripts/test.sh
 
   test-on-alpine-3_21_9:
     runs-on: ubuntu-latest
@@ -127,9 +119,7 @@ jobs:
           git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr
       - uses: actions/checkout@v4
       - name: Build and smoke test
-        run: |
-          chmod 755 * .* -R
-          ./scripts/test.sh
+        run: ./scripts/test.sh
 
   test-on-ubuntu-22_04-arm:
     runs-on: ubuntu-22.04-arm
@@ -143,9 +133,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y musl-tools gcc gcovr
       - name: Build and smoke test
-        run: |
-          chmod 755 * .* -R
-          ./scripts/test.sh
+        run: ./scripts/test.sh
 
   test-on-ubuntu-22_04:
     runs-on: ubuntu-22.04
@@ -159,9 +147,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y musl-tools gcc gcovr
       - name: Build and smoke test
-        run: |
-          chmod 755 * .* -R
-          ./scripts/test.sh
+        run: ./scripts/test.sh
   
   test-on-ubuntu-24_04-arm:
     runs-on: ubuntu-24.04-arm
@@ -175,9 +161,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y musl-tools gcc gcovr
       - name: Build and smoke test
-        run: |
-          chmod 755 * .* -R
-          ./scripts/test.sh
+        run: ./scripts/test.sh
 
   test-on-ubuntu-24_04:
     runs-on: ubuntu-24.04
@@ -191,9 +175,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y musl-tools gcc gcovr
       - name: Build and smoke test
-        run: |
-          chmod 755 * .* -R
-          ./scripts/test.sh
+        run: ./scripts/test.sh
 
   test-on-ubuntu-26_04-arm:
     runs-on: ubuntu-26.04-arm
@@ -207,9 +189,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y musl-tools gcc gcovr
       - name: Build and smoke test
-        run: |
-          chmod 755 * .* -R
-          ./scripts/test.sh
+        run: ./scripts/test.sh
 
   test-on-ubuntu-26_04:
     runs-on: ubuntu-26.04
@@ -223,9 +203,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y musl-tools gcc gcovr
       - name: Build and smoke test
-        run: |
-          chmod 755 * .* -R
-          ./scripts/test.sh
+        run: ./scripts/test.sh
 
   test-windows-server-2025:
     runs-on: windows-2025

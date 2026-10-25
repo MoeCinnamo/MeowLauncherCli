@@ -38,8 +38,9 @@ fi
 GIT_VERSION="${GIT_VERSION:-$(git rev-parse HEAD 2>/dev/null || echo unknown)}"
 CFLAGS="$CFLAGS -DGIT_VERSION=\"$GIT_VERSION\""
 
-mapfile -t SOURCES < <(find . -name '*.c' -not -path './.git/*' -not -path './tests/*')
-njobs="$(nproc 2>/dev/null || echo 4)"
+SOURCES=()
+while IFS= read -r f; do SOURCES+=("$f"); done < <(find . -name '*.c' -not -path './.git/*' -not -path './tests/*')
+njobs="$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)"
 BIN="$test_dir/meowlaunchcli${bin_suffix}"
 status=0
 
@@ -66,7 +67,8 @@ rebuild() {
     if [ -n "$langs" ]; then
         for l in $langs; do wanted+=("$PROJECT_ROOT/lang/$l.json"); done
     else
-        mapfile -t wanted < <(find "$PROJECT_ROOT/lang" -maxdepth 1 -name '*.json' | sort)
+        wanted=()
+        while IFS= read -r f; do wanted+=("$f"); done < <(find "$PROJECT_ROOT/lang" -maxdepth 1 -name '*.json' | sort)
     fi
     local ordered=()
     [ -f "$PROJECT_ROOT/lang/en.json" ] && ordered+=("$PROJECT_ROOT/lang/en.json")

@@ -2,6 +2,15 @@
 
 Newest record on top.
 
+## 2026-10-25 macOS bash compatibility
+
+- **Reason**: macOS default bash 3.2 lacks `mapfile`; `nproc` unavailable.
+- **Decisions**:
+  - build.sh/test.sh replace all `mapfile` with `while read` loop
+    (including lang archive collection).
+  - `nproc` fallback to `sysctl -n hw.ncpu` on macOS.
+- **Trade-off**: None.
+
 ## 2026-10-25 always-local strcasestr, macOS CI chmod fix
 
 - **Reason**: Ubuntu 26.04 glibc doesn't declare strcasestr under
