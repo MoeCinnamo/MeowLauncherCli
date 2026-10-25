@@ -188,10 +188,12 @@ for test_src in $(find tests -name 'test_*.c'); do
     # main), so no separate module link step is needed.
     # Per-test extra link flags: usersfile test wraps malloc to inject failure.
     extra_ld=""
-    case "$test_src" in
-        *test_usersfile.c) extra_ld="-Wl,--wrap,malloc -Wl,--wrap,free" ;;
-        *test_json_io.c) extra_ld="-Wl,--wrap,malloc" ;;
-    esac
+    if [ "$(uname -s)" != "Darwin" ]; then
+        case "$test_src" in
+            *test_usersfile.c) extra_ld="-Wl,--wrap,malloc -Wl,--wrap,free" ;;
+            *test_json_io.c) extra_ld="-Wl,--wrap,malloc" ;;
+        esac
+    fi
     # shellcheck disable=SC2086
     if ! "$CC" $CFLAGS "$test_src" -o "$unit_bin" $extra_ld; then
         echo "[FAIL] build unit test $mod"

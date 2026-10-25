@@ -2,6 +2,15 @@
 
 Newest record on top.
 
+## 2026-10-25 macOS exedir in game.c, skip --wrap on Darwin
+
+- **Reason**: game.c also needed `_NSGetExecutablePath`; Apple ld rejects
+  `-Wl,--wrap`.
+- **Decisions**:
+  - game.c adds `_NSGetExecutablePath` under `__APPLE__`.
+  - test.sh skips `--wrap` flags on Darwin.
+- **Trade-off**: malloc-fail injection tests skipped on macOS.
+
 ## 2026-10-25 macOS exe path resolution
 
 - **Reason**: macOS lacks `/proc/self/exe`, exedir() returned -1.
