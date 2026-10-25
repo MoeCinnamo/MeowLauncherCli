@@ -37,10 +37,26 @@ static int config_path(char *buf, size_t bufsz)
 int Game_Switch(const char *version)
 {
     char path[1024];
-    char buf[256];
-    snprintf(buf, sizeof buf, "{\"game_version\":\"%s\"}", version);
+    char *esc;
+    char *buf;
+    size_t n;
+    int rc;
+
     if (config_path(path, sizeof path) != 0) return 1;
-    if (Json_Save(path, buf) != 0) return 1;
+    esc = Json_Escape(version);
+    if (esc == NULL) return 1;
+    /* Exact-size buffer: escaped form can grow up to 6x the input. */
+    n = strlen(esc) + sizeof("{\"game_version\":\"\"}");
+    buf = malloc(n);
+    if (buf == NULL) {
+        free(esc);
+        return 1;
+    }
+    snprintf(buf, n, "{\"game_version\":\"%s\"}", esc);
+    free(esc);
+    rc = Json_Save(path, buf);
+    free(buf);
+    if (rc != 0) return 1;
     printf("%s: %s\n", I18n("game.switched"), version);
     return 0;
 }

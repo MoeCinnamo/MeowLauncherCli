@@ -93,7 +93,11 @@ const char *Json_FindValue(const char *start, const char *end,
         p++;
         const char *vstart = p;
         while (p < end && *p != '"') {
-            p++;
+            if (*p == '\\' && p + 1 < end) {
+                p += 2; /* skip the escaped character (e.g. \" or \\) */
+            } else {
+                p++;
+            }
         }
         if (p >= end) {
             return NULL;

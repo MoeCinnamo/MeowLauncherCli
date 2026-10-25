@@ -22,9 +22,17 @@ const char *Json_FindObject(const char *json, const char *key,
                             const char **end);
 
 /* Within an object bounded by [start, end), locate "key":"value" and set
- * *vlen to the value length. Returns pointer to the opening quote of the
+ * *vlen to the value length. Escaped quotes and backslashes (\", \\)
+ * inside the value are skipped, so the whole value is returned including
+ * its escape sequences. Returns pointer to the opening quote of the
  * value, or NULL on miss. */
 const char *Json_FindValue(const char *start, const char *end,
                            const char *key, size_t *vlen);
+
+/* Return a malloc'd JSON-escaped copy of s per RFC 8259 string rules:
+ * " -> \", \ -> \\, control chars -> \b \f \n \r \t or \u00XX; bytes
+ * >= 0x20 (including UTF-8 continuation bytes) pass through unchanged.
+ * Returns NULL on allocation failure; caller must free(). */
+char *Json_Escape(const char *s);
 
 #endif

@@ -2,6 +2,26 @@
 
 Newest record on top.
 
+## 2026-10-25 JSON injection fix
+
+- **Reason**: `Game_Switch` concatenated the user-supplied version into a
+  JSON string, so quotes/backslashes/control characters could corrupt
+  config.json or inject extra fields; the fixed 256-byte buffer could also
+  truncate long escaped values.
+- **Decisions**:
+  - New `internal/json/json_escape.c`: `Json_Escape()` escapes `"`, `\`,
+    `\b \f \n \r \t` and other control chars as `\u00XX` (RFC 8259); bytes
+    >= 0x20 (UTF-8) pass through unchanged.
+  - `Game_Switch` escapes the version and writes through an exactly-sized
+    malloc'd buffer.
+  - `Json_FindValue` skips `\"`/`\\` so escaped values read back in full.
+  - Tests: new `tests/internal/json/test_json_escape.c`; escape cases added
+    to `tests/internal/json/test_json_walk.c` and
+    `tests/internal/game/test_game.c`; `test.sh` links the new test with
+    `--wrap,malloc`.
+- **Trade-off**: `game current` shows raw escaped text (e.g. `1.0\"x`) for
+  versions containing quotes; values are not unescaped on display.
+
 ## 2026-10-25 config module and shared paths
 
 - **Reason**: User wants `game switch` echo, full `config` subcommand, and

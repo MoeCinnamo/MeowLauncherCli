@@ -192,6 +192,7 @@ for test_src in $(find tests -name 'test_*.c'); do
         case "$test_src" in
             *test_usersfile.c) extra_ld="-Wl,--wrap,malloc -Wl,--wrap,free" ;;
             *test_json_io.c) extra_ld="-Wl,--wrap,malloc" ;;
+            *test_json_escape.c) extra_ld="-Wl,--wrap,malloc" ;;
         esac
     fi
     # shellcheck disable=SC2086

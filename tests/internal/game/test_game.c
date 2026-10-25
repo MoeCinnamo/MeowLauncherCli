@@ -11,6 +11,7 @@
 #include "internal/paths/paths.c"
 #include "internal/json/json_io.c"
 #include "internal/json/json_walk.c"
+#include "internal/json/json_escape.c"
 
 const char *I18n(const char *key) { return key; }
 
@@ -38,6 +39,32 @@ int main(void)
     CHECK(Game_Switch("1.21.11") == 0, "Game_Switch writes");
     CHECK(Game_Current() == 0, "Game_Current reads back");
     CHECK(Game_Show() == 0, "Game_Show lists versions");
+
+    /* JSON injection: quotes must be escaped on write, not injected. */
+    CHECK(Game_Switch("1.21.11\"Neoforge") == 0, "Game_Switch escapes quotes");
+    {
+        char raw[256];
+        size_t got = 0;
+        FILE *f = fopen("build_test/.meowlaunch/config.json", "rb");
+        if (f != NULL) {
+            got = fread(raw, 1, sizeof raw - 1, f);
+            fclose(f);
+        }
+        raw[got] = '\0';
+        CHECK(strcmp(raw, "{\"game_version\":\"1.21.11\\\"Neoforge\"}") == 0,
+              "Game_Switch writes escaped json");
+    }
+    {
+        char *j = Json_Load("build_test/.meowlaunch/config.json");
+        size_t vlen;
+        const char *v = j != NULL
+            ? Json_FindValue(j, j + strlen(j), "game_version", &vlen)
+            : NULL;
+        CHECK(v != NULL && vlen == 17
+              && memcmp(v, "1.21.11\\\"Neoforge", 17) == 0,
+              "Game_Switch escaped value reads back fully");
+        free(j);
+    }
 
     /* Missing config: Game_Current prints (none). */
     remove("build_test/.meowlaunch/config.json");

@@ -94,5 +94,30 @@ int main(void)
               "FindValue unterminated string");
     }
 
+    /* Escaped quotes/backslashes inside values are skipped. */
+    {
+        const char *obj = "{\"a\":\"1.0\\\"x\"}";
+        size_t len;
+        const char *v = Json_FindValue(obj, obj + strlen(obj), "a", &len);
+        CHECK(v != NULL && len == 6 && memcmp(v, "1.0\\\"x", 6) == 0,
+              "FindValue skips escaped quote");
+    }
+
+    {
+        const char *obj = "{\"a\":\"x\\\\y\"}";
+        size_t len;
+        const char *v = Json_FindValue(obj, obj + strlen(obj), "a", &len);
+        CHECK(v != NULL && len == 4 && memcmp(v, "x\\\\y", 4) == 0,
+              "FindValue skips escaped backslash");
+    }
+
+    /* Trailing lone backslash: value unterminated -> NULL. */
+    {
+        const char *obj = "{\"a\":\"x\\";
+        size_t len;
+        CHECK(Json_FindValue(obj, obj + strlen(obj), "a", &len) == NULL,
+              "FindValue trailing backslash -> NULL");
+    }
+
     return failures ? 1 : 0;
 }
