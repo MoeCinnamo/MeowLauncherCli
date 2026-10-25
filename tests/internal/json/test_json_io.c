@@ -46,12 +46,14 @@ int main(void)
     CHECK(Json_Save("build_test/json_io_tmp/sub/dir/data.json/inside", "x") != 0,
           "Json_Save unwritable -> -1");
 
+#ifndef __APPLE__
     /* malloc failure in Json_Load: buf=NULL path. */
     malloc_calls = 0;
     malloc_fail_at = 0;
     CHECK(Json_Load("build_test/json_io_tmp/sub/dir/data.json") == NULL,
           "Json_Load malloc fail -> NULL");
     malloc_fail_at = -1;
+#endif
 
     return failures ? 1 : 0;
 }

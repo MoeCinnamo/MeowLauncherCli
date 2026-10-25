@@ -82,6 +82,7 @@ int main(void)
         free(r);
     }
 
+#ifndef __APPLE__
     /* malloc failure during insert: inject failure so nb=malloc returns NULL. */
     {
         char *buf = strdup("{\"users\":[]}");
@@ -91,6 +92,7 @@ int main(void)
         free(buf);
         malloc_fail_at = -1;
     }
+#endif
 
     return failures ? 1 : 0;
 }

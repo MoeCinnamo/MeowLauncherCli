@@ -2,6 +2,15 @@
 
 Newest record on top.
 
+## 2026-10-25 skip malloc-fail tests on macOS
+
+- **Reason**: macOS ld doesn't support `--wrap`; malloc-fail injection tests
+  fail without it.
+- **Decisions**:
+  - `test_json_io.c` and `test_usersfile.c` skip malloc-fail assertions
+    under `#ifndef __APPLE__`.
+- **Trade-off**: malloc-fail branches not covered on macOS.
+
 ## 2026-10-25 cross-platform Codecov upload
 
 - **Reason**: macOS clang test results should also report to Codecov.
