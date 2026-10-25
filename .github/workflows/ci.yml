@@ -24,7 +24,7 @@ jobs:
           apk add --no-cache \
           sudo bash zsh build-base gcc make pkgconf fontconfig fontconfig-dev \
           git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr gpg
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and smoke test
         run: ./scripts/test.sh
       - name: Coverage build and report
@@ -33,17 +33,17 @@ jobs:
         run: COVERAGE=1 ./scripts/test.sh
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
       - name: Upload coverage report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-report
           path: build_test/coverage*.html
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           files: build_test/coverage.xml
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -63,12 +63,12 @@ jobs:
           apk add --no-cache \
           sudo bash zsh build-base gcc make pkgconf fontconfig fontconfig-dev \
           git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr gpg
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and smoke test
         run: ./scripts/test.sh
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
@@ -87,12 +87,12 @@ jobs:
           apk add --no-cache \
           sudo bash zsh build-base gcc make pkgconf fontconfig fontconfig-dev \
           git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr gpg
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and smoke test
         run: ./scripts/test.sh
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
@@ -111,12 +111,12 @@ jobs:
           apk add --no-cache \
           sudo bash zsh build-base gcc make pkgconf fontconfig fontconfig-dev \
           git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr gpg
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and smoke test
         run: ./scripts/test.sh
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
@@ -135,12 +135,12 @@ jobs:
           apk add --no-cache \
           sudo bash zsh build-base gcc make pkgconf fontconfig fontconfig-dev \
           git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr gpg
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and smoke test
         run: ./scripts/test.sh
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
@@ -151,7 +151,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install toolchain
         run: |
           sudo apt-get update
@@ -160,7 +160,7 @@ jobs:
         run: ./scripts/test.sh
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
@@ -171,7 +171,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install toolchain
         run: |
           sudo apt-get update
@@ -180,7 +180,7 @@ jobs:
         run: ./scripts/test.sh
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
@@ -191,7 +191,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install toolchain
         run: |
           sudo apt-get update
@@ -200,7 +200,7 @@ jobs:
         run: ./scripts/test.sh
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
@@ -211,7 +211,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install toolchain
         run: |
           sudo apt-get update
@@ -220,7 +220,7 @@ jobs:
         run: ./scripts/test.sh
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
@@ -231,7 +231,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install toolchain
         run: |
           sudo apt-get update
@@ -240,7 +240,7 @@ jobs:
         run: ./scripts/test.sh
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
@@ -251,7 +251,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install toolchain
         run: |
           sudo apt-get update
@@ -260,7 +260,7 @@ jobs:
         run: ./scripts/test.sh
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
@@ -271,12 +271,12 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and smoke test (MinGW)
         run: ./scripts/test.sh
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
@@ -287,12 +287,12 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and smoke test (MinGW)
         run: ./scripts/test.sh
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
@@ -303,12 +303,12 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and smoke test (MinGW)
         run: ./scripts/test.sh
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
@@ -319,12 +319,12 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and smoke test (clang)
         run: ./scripts/test.sh
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
@@ -335,12 +335,12 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and smoke test (clang)
         run: ./scripts/test.sh
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
@@ -351,12 +351,12 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and smoke test (clang)
         run: ./scripts/test.sh
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
@@ -367,12 +367,12 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and smoke test (clang)
         run: ./scripts/test.sh
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
