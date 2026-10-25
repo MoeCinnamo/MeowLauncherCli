@@ -13,6 +13,19 @@
 #include "internal/json/json_walk.c"
 #include "internal/json/json_escape.c"
 
+#ifndef __APPLE__
+/* Linker wraps: --wrap,malloc routes malloc -> __wrap_malloc. */
+static int malloc_fail_at = -1;
+static int malloc_calls = 0;
+void *__real_malloc(size_t);
+void *__wrap_malloc(size_t n)
+{
+    malloc_calls++;
+    if (malloc_fail_at >= 0 && malloc_calls > malloc_fail_at) return NULL;
+    return __real_malloc(n);
+}
+#endif
+
 const char *I18n(const char *key) { return key; }
 
 static int failures = 0;
@@ -86,6 +99,37 @@ int main(void)
     rename("build_test/.minecraft/versions", "build_test/.minecraft/versions_bak");
     CHECK(Game_Show() == 0, "Game_Show missing versions dir");
     rename("build_test/.minecraft/versions_bak", "build_test/.minecraft/versions");
+
+    /* Json_Save failure: .meowlaunch path blocked by a file -> rc != 0. */
+#ifdef _WIN32
+    system("rmdir /s /q build_test\\.meowlaunch >nul 2>&1");
+#else
+    system("rm -rf build_test/.meowlaunch");
+#endif
+    {
+        FILE *f = fopen("build_test/.meowlaunch", "w");
+        if (f != NULL) {
+            fputs("x", f);
+            fclose(f);
+        }
+    }
+    CHECK(Game_Switch("blocked") == 1, "Game_Switch save fail -> 1");
+    remove("build_test/.meowlaunch");
+
+#ifndef __APPLE__
+    /* malloc failure in Json_Escape: esc == NULL -> Game_Switch returns 1. */
+    malloc_calls = 0;
+    malloc_fail_at = 0;
+    CHECK(Game_Switch("oom") == 1, "Game_Switch escape malloc fail -> 1");
+    malloc_fail_at = -1;
+
+    /* malloc failure for the config buffer: buf == NULL -> Game_Switch
+     * returns 1, exercising the free(esc) + return cleanup. */
+    malloc_calls = 0;
+    malloc_fail_at = 1;
+    CHECK(Game_Switch("oom") == 1, "Game_Switch buf malloc fail -> 1");
+    malloc_fail_at = -1;
+#endif
 
     return failures ? 1 : 0;
 }
