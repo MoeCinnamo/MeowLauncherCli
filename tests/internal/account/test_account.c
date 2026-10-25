@@ -5,10 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
-#ifndef _WIN32
-#include <unistd.h>
-#endif
 
 #include "internal/account/account.c"
 #include "internal/account/uuid.c"
@@ -49,18 +45,16 @@ int main(void)
     remove("build_test/.meowlaunch/data/users.json");
     CHECK(Account_Local_Show() == 0, "show with no users.json");
 
-    /* Read-only data dir: usersfile_save fails (skip when running as root). */
+    /* Make data path a file (not dir): usersfile_save fails cross-platform. */
 #ifdef _WIN32
-    system("attrib +r build_test\\.meowlaunch\\data >nul 2>&1");
-    CHECK(Account_Local_Add("readonly") != 0, "add to read-only dir fails");
-    system("attrib -r build_test\\.meowlaunch\\data >nul 2>&1");
+    system("rmdir /s /q build_test\\.meowlaunch\\data >nul 2>&1");
 #else
-    if (getuid() != 0) {
-        chmod("build_test/.meowlaunch/data", 0555);
-        CHECK(Account_Local_Add("readonly") != 0, "add to read-only dir fails");
-        chmod("build_test/.meowlaunch/data", 0755);
-    }
+    system("rm -rf build_test/.meowlaunch/data");
 #endif
+    FILE *f = fopen("build_test/.meowlaunch/data", "w");
+    fclose(f);
+    CHECK(Account_Local_Add("badpath") != 0, "add to non-dir data fails");
+    remove("build_test/.meowlaunch/data");
 
     return failures ? 1 : 0;
 }

@@ -2,6 +2,17 @@
 
 Newest record on top.
 
+## 2026-10-25 macOS clang CI, cross-platform error injection
+
+- **Reason**: Need macOS cross-platform test coverage with clang; read-only
+  dir test unreliable across platforms.
+- **Decisions**:
+  - CI: added `macos-15` and `macos-26` jobs.
+  - i18n prefix is full locale tag (`zh_TW`, `ja_JP`, `zh_HK`); `zh_CN`
+    falls back to English.
+  - test_account: trigger usersfile_save failure by rm -rf data dir then
+    creating it as a file, cross-platform.
+
 ## 2026-10-25 read-only dir test, zh_HK locale, coverage fixes
 
 - **Reason**: CI runs as root so chmod doesn't block writes; `0o` prefix is

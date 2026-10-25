@@ -256,3 +256,51 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and smoke test (MinGW)
         run: ./scripts/test.sh
+
+  test-macos-15:
+    runs-on: macos-15-intel
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and smoke test (clang)
+        run: |
+          chmod 755 * .* -R
+          ./scripts/test.sh
+
+  test-macos-15-arm:
+    runs-on: macos-15
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and smoke test (clang)
+        run: |
+          chmod 755 * .* -R
+          ./scripts/test.sh
+
+  test-macos-26:
+    runs-on: macos-26-intel
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and smoke test (clang)
+        run: |
+          chmod 755 * .* -R
+          ./scripts/test.sh
+
+  test-macos-26-arm:
+    runs-on: macos-26
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and smoke test (clang)
+        run: |
+          chmod 755 * .* -R
+          ./scripts/test.sh
