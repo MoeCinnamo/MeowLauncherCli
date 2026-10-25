@@ -2,6 +2,13 @@
 
 Newest record on top.
 
+## 2026-10-25 macOS exe path resolution
+
+- **Reason**: macOS lacks `/proc/self/exe`, exedir() returned -1.
+- **Decisions**:
+  - usersfile.c adds `_NSGetExecutablePath` under `__APPLE__`.
+- **Trade-off**: None.
+
 ## 2026-10-25 macOS bash compatibility
 
 - **Reason**: macOS default bash 3.2 lacks `mapfile`; `nproc` unavailable.
