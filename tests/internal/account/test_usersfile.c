@@ -13,6 +13,7 @@
 static int malloc_fail_at = -1;
 static int malloc_calls = 0;
 
+#ifndef __APPLE__
 /* Linker wraps: --wrap,malloc routes malloc -> __wrap_malloc. */
 void *__real_malloc(size_t);
 void __real_free(void *);
@@ -25,6 +26,7 @@ void *__wrap_malloc(size_t n)
     return __real_malloc(n);
 }
 void __wrap_free(void *p) { __real_free(p); }
+#endif
 
 static int failures = 0;
 #define CHECK(cond, name) do { \

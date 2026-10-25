@@ -2,6 +2,14 @@
 
 Newest record on top.
 
+## 2026-10-25 cross-platform Codecov upload
+
+- **Reason**: macOS clang test results should also report to Codecov.
+- **Decisions**:
+  - Each macOS CI job uploads `build_test/junit.xml` via codecov/test-results-action.
+  - `__wrap_malloc`/`__real_malloc` guarded by `#ifndef __APPLE__` in tests.
+- **Trade-off**: None.
+
 ## 2026-10-25 macOS exedir in game.c, skip --wrap on Darwin
 
 - **Reason**: game.c also needed `_NSGetExecutablePath`; Apple ld rejects

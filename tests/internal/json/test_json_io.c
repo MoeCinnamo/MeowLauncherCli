@@ -10,6 +10,7 @@
 
 static int malloc_fail_at = -1;
 static int malloc_calls = 0;
+#ifndef __APPLE__
 void *__real_malloc(size_t);
 void *__wrap_malloc(size_t n)
 {
@@ -17,6 +18,7 @@ void *__wrap_malloc(size_t n)
     if (malloc_fail_at >= 0 && malloc_calls > malloc_fail_at) return NULL;
     return __real_malloc(n);
 }
+#endif
 
 static int failures = 0;
 #define CHECK(cond, name) do { \

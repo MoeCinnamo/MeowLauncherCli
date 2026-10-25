@@ -66,7 +66,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and smoke test
         run: ./scripts/test.sh
-  
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build_test/junit.xml
+
   test-on-alpine-3_23_7:
     runs-on: ubuntu-latest
     container:
@@ -84,6 +90,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and smoke test
         run: ./scripts/test.sh
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build_test/junit.xml
 
   test-on-alpine-3_22_7:
     runs-on: ubuntu-latest
@@ -102,6 +114,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and smoke test
         run: ./scripts/test.sh
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build_test/junit.xml
 
   test-on-alpine-3_21_9:
     runs-on: ubuntu-latest
@@ -120,6 +138,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and smoke test
         run: ./scripts/test.sh
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build_test/junit.xml
 
   test-on-ubuntu-22_04-arm:
     runs-on: ubuntu-22.04-arm
@@ -134,6 +158,12 @@ jobs:
           sudo apt-get install -y musl-tools gcc gcovr
       - name: Build and smoke test
         run: ./scripts/test.sh
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build_test/junit.xml
 
   test-on-ubuntu-22_04:
     runs-on: ubuntu-22.04
@@ -148,7 +178,13 @@ jobs:
           sudo apt-get install -y musl-tools gcc gcovr
       - name: Build and smoke test
         run: ./scripts/test.sh
-  
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build_test/junit.xml
+
   test-on-ubuntu-24_04-arm:
     runs-on: ubuntu-24.04-arm
     defaults:
@@ -162,6 +198,12 @@ jobs:
           sudo apt-get install -y musl-tools gcc gcovr
       - name: Build and smoke test
         run: ./scripts/test.sh
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build_test/junit.xml
 
   test-on-ubuntu-24_04:
     runs-on: ubuntu-24.04
@@ -176,6 +218,12 @@ jobs:
           sudo apt-get install -y musl-tools gcc gcovr
       - name: Build and smoke test
         run: ./scripts/test.sh
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build_test/junit.xml
 
   test-on-ubuntu-26_04-arm:
     runs-on: ubuntu-26.04-arm
@@ -190,6 +238,12 @@ jobs:
           sudo apt-get install -y musl-tools gcc gcovr
       - name: Build and smoke test
         run: ./scripts/test.sh
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build_test/junit.xml
 
   test-on-ubuntu-26_04:
     runs-on: ubuntu-26.04
@@ -204,6 +258,12 @@ jobs:
           sudo apt-get install -y musl-tools gcc gcovr
       - name: Build and smoke test
         run: ./scripts/test.sh
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build_test/junit.xml
 
   test-windows-server-2025:
     runs-on: windows-2025
@@ -214,6 +274,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and smoke test (MinGW)
         run: ./scripts/test.sh
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build_test/junit.xml
 
   test-windows-server-2022:
     runs-on: windows-2022
@@ -224,6 +290,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and smoke test (MinGW)
         run: ./scripts/test.sh
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build_test/junit.xml
 
   test-windows-11-arm:
     runs-on: windows-11-arm
@@ -234,6 +306,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and smoke test (MinGW)
         run: ./scripts/test.sh
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build_test/junit.xml
 
   test-macos-15:
     runs-on: macos-15-intel
@@ -244,6 +322,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and smoke test (clang)
         run: ./scripts/test.sh
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build_test/junit.xml
 
   test-macos-15-arm:
     runs-on: macos-15
@@ -254,6 +338,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and smoke test (clang)
         run: ./scripts/test.sh
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build_test/junit.xml
 
   test-macos-26:
     runs-on: macos-26-intel
@@ -264,6 +354,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and smoke test (clang)
         run: ./scripts/test.sh
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build_test/junit.xml
 
   test-macos-26-arm:
     runs-on: macos-26
@@ -274,3 +370,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and smoke test (clang)
         run: ./scripts/test.sh
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build_test/junit.xml
