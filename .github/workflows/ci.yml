@@ -72,30 +72,6 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
-        
-  test-on-alpine-3_24_3-arm:
-    runs-on: ubuntu-24.04-arm
-    container:
-      image: alpine:3.24.3
-    steps:
-      - name: Install dependencies
-        run: |
-          echo "http://dl-cdn.alpinelinux.org/alpine/v3.24/main" > /etc/apk/repositories
-          echo "http://dl-cdn.alpinelinux.org/alpine/v3.24/community" >> /etc/apk/repositories
-          apk update --no-cache
-          apk upgrade --no-cache
-          apk add --no-cache \
-          sudo bash zsh build-base gcc make pkgconf fontconfig fontconfig-dev \
-          git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr gpg
-      - uses: actions/checkout@v4
-      - name: Build and smoke test
-        run: ./scripts/test.sh
-      - name: Upload test results to Codecov
-        if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: build_test/junit.xml
 
   test-on-alpine-3_23_7:
     runs-on: ubuntu-latest
@@ -106,30 +82,6 @@ jobs:
         run: |
           echo "http://dl-cdn.alpinelinux.org/alpine/v3.23/main" > /etc/apk/repositories
           echo "http://dl-cdn.alpinelinux.org/alpine/v3.23/community" >> /etc/apk/repositories
-          apk update --no-cache
-          apk upgrade --no-cache
-          apk add --no-cache \
-          sudo bash zsh build-base gcc make pkgconf fontconfig fontconfig-dev \
-          git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr gpg
-      - uses: actions/checkout@v4
-      - name: Build and smoke test
-        run: ./scripts/test.sh
-      - name: Upload test results to Codecov
-        if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: build_test/junit.xml
-
-  test-on-alpine-3_23_7-arm:
-    runs-on: ubuntu-24.04-arm
-    container:
-      image: alpine:3.23.7
-    steps:
-      - name: Install dependencies
-        run: |
-          echo "http://dl-cdn.alpinelinux.org/alpine/v3.24/main" > /etc/apk/repositories
-          echo "http://dl-cdn.alpinelinux.org/alpine/v3.24/community" >> /etc/apk/repositories
           apk update --no-cache
           apk upgrade --no-cache
           apk add --no-cache \
@@ -169,30 +121,6 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
 
-  test-on-alpine-3_22_7-arm:
-    runs-on: ubuntu-24.04-arm
-    container:
-      image: alpine:3.22.7
-    steps:
-      - name: Install dependencies
-        run: |
-          echo "http://dl-cdn.alpinelinux.org/alpine/v3.24/main" > /etc/apk/repositories
-          echo "http://dl-cdn.alpinelinux.org/alpine/v3.24/community" >> /etc/apk/repositories
-          apk update --no-cache
-          apk upgrade --no-cache
-          apk add --no-cache \
-          sudo bash zsh build-base gcc make pkgconf fontconfig fontconfig-dev \
-          git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr gpg
-      - uses: actions/checkout@v4
-      - name: Build and smoke test
-        run: ./scripts/test.sh
-      - name: Upload test results to Codecov
-        if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: build_test/junit.xml
-
   test-on-alpine-3_21_9:
     runs-on: ubuntu-latest
     container:
@@ -202,30 +130,6 @@ jobs:
         run: |
           echo "http://dl-cdn.alpinelinux.org/alpine/v3.21/main" > /etc/apk/repositories
           echo "http://dl-cdn.alpinelinux.org/alpine/v3.21/community" >> /etc/apk/repositories
-          apk update --no-cache
-          apk upgrade --no-cache
-          apk add --no-cache \
-          sudo bash zsh build-base gcc make pkgconf fontconfig fontconfig-dev \
-          git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr gpg
-      - uses: actions/checkout@v4
-      - name: Build and smoke test
-        run: ./scripts/test.sh
-      - name: Upload test results to Codecov
-        if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: build_test/junit.xml
-
-  test-on-alpine-3_21_9-arm:
-    runs-on: ubuntu-24.04-arm
-    container:
-      image: alpine:3.21.9
-    steps:
-      - name: Install dependencies
-        run: |
-          echo "http://dl-cdn.alpinelinux.org/alpine/v3.24/main" > /etc/apk/repositories
-          echo "http://dl-cdn.alpinelinux.org/alpine/v3.24/community" >> /etc/apk/repositories
           apk update --no-cache
           apk upgrade --no-cache
           apk add --no-cache \
