@@ -17,6 +17,7 @@
 #elif defined(__APPLE__)
 #include <mach-o/dyld.h>
 #include <dirent.h>
+#include <unistd.h>
 #include <libgen.h>
 #include <sys/stat.h>
 #else
