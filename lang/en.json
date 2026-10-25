@@ -22,11 +22,26 @@
   },
   "game": {
     "usage": "Usage: meowlaunchcli game <help|switch|current|show>",
+    "switched": "Switched to",
     "help": {
       "title": "Game version management:",
       "switch": "Switch to a game version",
       "current": "Show current game version",
       "show": "List installed game versions"
+    }
+  },
+  "config": {
+    "usage": "Usage: meowlaunchcli config <java|memory|window|args|precmd|postcmd|gfx|help>",
+    "help": {
+      "title": "Configuration:",
+      "java_set": "Set java version (e.g. 21)",
+      "java_show": "Show configured java version (auto = detect)",
+      "memory": "Set game memory (MB, or auto)",
+      "window": "Set window mode (windowed/fullscreen/maximized) size",
+      "args": "Set JVM arguments",
+      "precmd": "Set command before launch",
+      "postcmd": "Set command after exit",
+      "gfx": "Set graphics API (opengl/vulkan/auto)"
     }
   },
   "account": {

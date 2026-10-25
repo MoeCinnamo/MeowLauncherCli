@@ -22,11 +22,20 @@
   },
   "game": {
     "usage": "用法：meowlaunchcli game <help|switch|current|show>",
+    "switched": "已切換至",
     "help": {
       "title": "遊戲版本管理：",
       "switch": "切換遊戲版本",
       "current": "顯示目前遊戲版本",
       "show": "列出已安裝遊戲版本"
+    }
+  },
+  "config": {
+    "usage": "用法：meowlaunchcli config <java|memory|window|args|precmd|postcmd|gfx|help>",
+    "help": {
+      "title": "設定：",
+      "java_set": "設定 Java 版本（例如 21）",
+      "java_show": "顯示目前 Java 版本（auto = 自動偵測）"
     }
   },
   "account": {

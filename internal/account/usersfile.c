@@ -21,39 +21,12 @@
 
 #include "internal/json/json.h"
 #include "internal/account/private.h"
-
-/* Fill buf with the directory containing the running executable.
- * Returns 0 on success, -1 on error. */
-static int exedir(char *buf, size_t bufsz)
-{
-#ifdef _WIN32
-    DWORD n = GetModuleFileNameA(NULL, buf, (DWORD)bufsz);
-    if (n == 0 || n >= bufsz) return -1;
-    /* Strip the filename. */
-    char *slash = strrchr(buf, '\\');
-    if (slash) *slash = '\0';
-    return 0;
-#elif defined(__APPLE__)
-    uint32_t n = bufsz;
-    if (_NSGetExecutablePath(buf, &n) != 0) return -1;
-    char *d = dirname(buf);
-    if (d != buf) snprintf(buf, bufsz, "%s", d);
-    return 0;
-#else
-    ssize_t n = readlink("/proc/self/exe", buf, bufsz - 1);
-    if (n <= 0) return -1;
-    buf[n] = '\0';
-    char *d = dirname(buf);
-    /* dirname may return a static buffer; copy back. */
-    if (d != buf) snprintf(buf, bufsz, "%s", d);
-    return 0;
-#endif
-}
+#include "internal/paths/paths.h"
 
 int usersfile_path(char *buf, size_t bufsz)
 {
     char dir[1024];
-    if (exedir(dir, sizeof dir) != 0) {
+    if (ExeDir(dir, sizeof dir) != 0) {
         return -1;
     }
 #ifdef _WIN32

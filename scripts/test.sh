@@ -202,7 +202,7 @@ for test_src in $(find tests -name 'test_*.c'); do
         continue
     fi
     echo "[INFO] == $mod =="
-    if MEOW_BIN="$BIN" "$unit_bin"; then
+    if MEOWLAUNCH_BIN="$BIN" "$unit_bin"; then
         results+=("PASS|unit test $mod")
     else
         echo "[FAIL] unit test $mod"

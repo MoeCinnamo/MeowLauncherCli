@@ -1,8 +1,5 @@
 /*
- * Local offline account business logic.
- *
- * Storage and JSON manipulation live in usersfile.c; UUID generation in
- * uuid.c. This file only wires the CLI commands together.
+ * Local offline account CLI commands.
  */
 
 #include <stdio.h>
@@ -85,7 +82,6 @@ int Account_Local_Show(void)
         printf("(none)\n");
         return 0;
     }
-    /* Walk the users array and print each name. */
     const char *p = buf;
     while ((p = strstr(p, "\"name\":")) != NULL) {
         p += 7;

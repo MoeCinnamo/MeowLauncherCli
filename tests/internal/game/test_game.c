@@ -8,8 +8,11 @@
 #include <sys/stat.h>
 
 #include "internal/game/game.c"
+#include "internal/paths/paths.c"
 #include "internal/json/json_io.c"
 #include "internal/json/json_walk.c"
+
+const char *I18n(const char *key) { return key; }
 
 static int failures = 0;
 #define CHECK(cond, name) do { \

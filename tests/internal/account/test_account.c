@@ -6,9 +6,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "internal/account/account.c"
+#include "internal/account/local.c"
 #include "internal/account/uuid.c"
 #include "internal/account/usersfile.c"
+#include "internal/paths/paths.c"
 #include "internal/json/json_io.c"
 #include "internal/json/json_walk.c"
 

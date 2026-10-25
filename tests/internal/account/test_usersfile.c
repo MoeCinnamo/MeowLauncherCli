@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include "internal/account/usersfile.c"
+#include "internal/paths/paths.c"
 #include "internal/json/json_io.c"
 #include "internal/json/json_walk.c"
 

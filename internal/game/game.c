@@ -7,49 +7,25 @@
 #include <string.h>
 
 #include "internal/json/json.h"
+#include "internal/i18n/i18n.h"
+#include "internal/paths/paths.h"
 
 #ifdef _WIN32
 #include <windows.h>
+#include <dirent.h>
+#include <sys/stat.h>
 #elif defined(__APPLE__)
-#include <mach-o/dyld.h>
-#include <libgen.h>
 #include <dirent.h>
 #include <sys/stat.h>
 #else
-#include <unistd.h>
-#include <libgen.h>
 #include <dirent.h>
 #include <sys/stat.h>
 #endif
-
-static int exedir(char *buf, size_t bufsz)
-{
-#ifdef _WIN32
-    DWORD n = GetModuleFileNameA(NULL, buf, (DWORD)bufsz);
-    if (n == 0 || n >= bufsz) return -1;
-    char *slash = strrchr(buf, '\\');
-    if (slash) *slash = '\0';
-    return 0;
-#elif defined(__APPLE__)
-    uint32_t n = bufsz;
-    if (_NSGetExecutablePath(buf, &n) != 0) return -1;
-    char *d = dirname(buf);
-    if (d != buf) snprintf(buf, bufsz, "%s", d);
-    return 0;
-#else
-    ssize_t n = readlink("/proc/self/exe", buf, bufsz - 1);
-    if (n <= 0) return -1;
-    buf[n] = '\0';
-    char *d = dirname(buf);
-    if (d != buf) snprintf(buf, bufsz, "%s", d);
-    return 0;
-#endif
-}
 
 static int config_path(char *buf, size_t bufsz)
 {
     char dir[1024];
-    if (exedir(dir, sizeof dir) != 0) return -1;
+    if (ExeDir(dir, sizeof dir) != 0) return -1;
 #ifdef _WIN32
     return snprintf(buf, bufsz, "%s\\.meowlaunch\\config.json", dir) < 0;
 #else
@@ -64,7 +40,9 @@ int Game_Switch(const char *version)
     char buf[256];
     snprintf(buf, sizeof buf, "{\"game_version\":\"%s\"}", version);
     if (config_path(path, sizeof path) != 0) return 1;
-    return Json_Save(path, buf) != 0;
+    if (Json_Save(path, buf) != 0) return 1;
+    printf("%s: %s\n", I18n("game.switched"), version);
+    return 0;
 }
 
 /* Print the current game version to stdout. Returns 0 on success. */
@@ -92,7 +70,7 @@ int Game_Current(void)
 int Game_Show(void)
 {
     char ex[1024];
-    if (exedir(ex, sizeof ex) != 0) return 1;
+    if (ExeDir(ex, sizeof ex) != 0) return 1;
 #ifdef _WIN32
     char pattern[4096];
     snprintf(pattern, sizeof pattern, "%s\\.minecraft\\versions\\*", ex);

@@ -22,11 +22,20 @@
   },
   "game": {
     "usage": "使い方: meowlaunchcli game <help|switch|current|show>",
+    "switched": "切り替えました:",
     "help": {
       "title": "ゲームバージョン管理:",
       "switch": "ゲームバージョンを切り替え",
       "current": "現在のバージョンを表示",
       "show": "インストール済みバージョンを一覧"
+    }
+  },
+  "config": {
+    "usage": "使い方: meowlaunchcli config <java|memory|window|args|precmd|postcmd|gfx|help>",
+    "help": {
+      "title": "設定:",
+      "java_set": "Java バージョンを設定 (例: 21)",
+      "java_show": "設定済み Java バージョンを表示 (auto = 自動検出)"
     }
   },
   "account": {

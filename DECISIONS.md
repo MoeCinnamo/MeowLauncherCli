@@ -2,6 +2,21 @@
 
 Newest record on top.
 
+## 2026-10-25 config module and shared paths
+
+- **Reason**: User wants `game switch` echo, full `config` subcommand, and
+  deduplicate exedir across modules.
+- **Decisions**:
+  - `Game_Switch` prints `game.switched: <ver>` after saving.
+  - `internal/config/` split into config_common/java/memory/window/args/
+    commands/gfx/help.c; stores keys in config.json.
+  - `internal/paths/paths.c`: shared `exedir()`; account/game/config call it.
+  - `config help`, `config java|memory|window|args|precmd|postcmd|gfx`
+    dispatched in main.c.
+  - i18n keys: `game.switched`, `config.usage`, `config.help.*`.
+  - Tests: tests/internal/{config,paths,account/local}.
+- **Trade-off**: None.
+
 ## 2026-10-25 skip malloc-fail tests on macOS
 
 - **Reason**: macOS ld doesn't support `--wrap`; malloc-fail injection tests

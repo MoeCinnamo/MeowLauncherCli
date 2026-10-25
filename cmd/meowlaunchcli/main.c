@@ -7,10 +7,12 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "internal/account/account.h"
 #include "internal/account/help.h"
+#include "internal/config/config.h"
 #include "internal/game/game.h"
 #include "internal/game/help.h"
 #include "internal/help/help.h"
@@ -68,6 +70,42 @@ int main(int argc, char **argv)
             return Game_Show();
         }
         fprintf(stderr, "%s\n", I18n("game.usage"));
+        return 1;
+    }
+
+    if (strcmp(argv[1], "config") == 0) {
+        if (argc >= 3 && strcmp(argv[2], "help") == 0) {
+            Config_Help();
+            return 0;
+        }
+        if (argc >= 3 && strcmp(argv[2], "java") == 0) {
+            if (argc >= 4) return Config_Java_Set(argv[3]);
+            return Config_Java_Show();
+        }
+        if (argc >= 3 && strcmp(argv[2], "memory") == 0) {
+            if (argc >= 4 && strcmp(argv[3], "auto") != 0)
+                return Config_Memory_Set(atoi(argv[3]));
+            return Config_Memory_Set(-1);
+        }
+        if (argc >= 3 && strcmp(argv[2], "window") == 0) {
+            int w = argc >= 5 ? atoi(argv[4]) : 0;
+            int h = argc >= 6 ? atoi(argv[5]) : 0;
+            return Config_Window_Set(argc >= 4 ? argv[3] : NULL, w, h);
+        }
+        if (argc >= 3 && strcmp(argv[2], "args") == 0) {
+            return Config_Java_Args_Set(argc >= 4 ? argv[3] : "");
+        }
+        if (argc >= 3 && strcmp(argv[2], "precmd") == 0) {
+            return Config_Precmd_Set(argc >= 4 ? argv[3] : "");
+        }
+        if (argc >= 3 && strcmp(argv[2], "postcmd") == 0) {
+            return Config_Postcmd_Set(argc >= 4 ? argv[3] : "");
+        }
+        if (argc >= 3 && strcmp(argv[2], "gfx") == 0) {
+            if (argc >= 4) return Config_Gfx_Set(argv[3]);
+            return Config_Gfx_Show();
+        }
+        Config_Help();
         return 1;
     }
 

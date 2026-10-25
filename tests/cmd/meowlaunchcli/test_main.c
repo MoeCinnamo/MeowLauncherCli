@@ -34,7 +34,7 @@ int main(void)
 {
     char buf[512];
     int rc;
-    const char *bin = getenv("MEOW_BIN");
+    const char *bin = getenv("MEOWLAUNCH_BIN");
     char cmd[128];
     if (bin == NULL || bin[0] == '\0') {
         bin = "./build/meowlaunchcli";
@@ -111,6 +111,39 @@ int main(void)
     snprintf(cmd, sizeof cmd, "%s game show 2>&1", bin);
     rc = run_capture(cmd, buf, sizeof buf);
     CHECK(rc == 0, "game show exits 0");
+
+    /* config help: exits 0. */
+    snprintf(cmd, sizeof cmd, "%s config help 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "config help exits 0");
+
+    /* config java set/show. */
+    snprintf(cmd, sizeof cmd, "%s config java 21 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "config java set exits 0");
+    snprintf(cmd, sizeof cmd, "%s config java 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "config java show exits 0");
+
+    /* config memory/window/args/precmd/postcmd/gfx. */
+    snprintf(cmd, sizeof cmd, "%s config memory 2048 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "config memory set exits 0");
+    snprintf(cmd, sizeof cmd, "%s config window windowed 1280 720 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "config window set exits 0");
+    snprintf(cmd, sizeof cmd, "%s config args -Xmx2G 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "config args set exits 0");
+    snprintf(cmd, sizeof cmd, "%s config precmd option 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "config precmd set exits 0");
+    snprintf(cmd, sizeof cmd, "%s config postcmd done 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "config postcmd set exits 0");
+    snprintf(cmd, sizeof cmd, "%s config gfx opengl 2>&1", bin);
+    rc = run_capture(cmd, buf, sizeof buf);
+    CHECK(rc == 0, "config gfx set exits 0");
 
     return failures ? 1 : 0;
 }
