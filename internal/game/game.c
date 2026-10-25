@@ -13,6 +13,7 @@
 #elif defined(__APPLE__)
 #include <mach-o/dyld.h>
 #include <libgen.h>
+#include <dirent.h>
 #include <sys/stat.h>
 #else
 #include <unistd.h>
