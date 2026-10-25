@@ -12,6 +12,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+
+#if !defined(__GLIBC__)
+static char *strcasestr(const char *hay, const char *needle)
+{
+    size_t nlen = strlen(needle);
+    if (nlen == 0) return (char *)hay;
+    for (; *hay; hay++) {
+        size_t i;
+        for (i = 0; i < nlen; i++) {
+            if (tolower((unsigned char)hay[i]) != tolower((unsigned char)needle[i])) break;
+        }
+        if (i == nlen) return (char *)hay;
+    }
+    return NULL;
+}
+#endif
 
 #include "internal/i18n/i18n.h"
 #include "internal/i18n/gen/lang_embedded.h"
@@ -35,15 +52,27 @@ void I18n_Init(void)
     fallback_json = builtin_langs[0].json;
 
     const char *lang = getenv("LANG");
-    if (lang == NULL) {
+    if (lang == NULL || lang[0] == '\0') {
         return;
     }
+
+    /* Require UTF-8 or C/POSIX; anything else (GBK, Shift_JIS, etc.)
+     * falls back to English to avoid mojibake on Windows. */
+    const char *dot = strchr(lang, '.');
+    if (dot != NULL) {
+        if (strcasestr(dot, "utf-8") == NULL && strcasestr(dot, "utf8") == NULL) {
+            return;
+        }
+    }
+
     for (size_t i = 1; i < BUILTIN_LANGS_COUNT; i++) {
         size_t plen = strlen(builtin_langs[i].prefix);
-        if (strncmp(lang, builtin_langs[i].prefix, plen) == 0) {
-            active_json = builtin_langs[i].json;
-            break;
-        }
+        if (strncmp(lang, builtin_langs[i].prefix, plen) != 0) continue;
+        /* Boundary: next char after prefix must be '_', '-' or '.' or end. */
+        char next = lang[plen];
+        if (next != '\0' && next != '_' && next != '-' && next != '.') continue;
+        active_json = builtin_langs[i].json;
+        break;
     }
 }
 

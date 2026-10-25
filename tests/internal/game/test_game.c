@@ -52,5 +52,10 @@ int main(void)
     CHECK(Game_Current() == 0, "Game_Current malformed json");
     remove("build_test/.meowlaunch/config.json");
 
+    /* Missing versions dir: Game_Show prints (no versions directory). */
+    rename("build_test/.minecraft/versions", "build_test/.minecraft/versions_bak");
+    CHECK(Game_Show() == 0, "Game_Show missing versions dir");
+    rename("build_test/.minecraft/versions_bak", "build_test/.minecraft/versions");
+
     return failures ? 1 : 0;
 }

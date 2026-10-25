@@ -12,37 +12,38 @@ on:
 jobs:
   test-and-coverage:
     runs-on: ubuntu-latest
+    container:
+      image: alpine:3.24.3
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Install toolchain
+      - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y musl-tools gcc gcovr
-
+          echo "http://dl-cdn.alpinelinux.org/alpine/v3.24/main" > /etc/apk/repositories
+          echo "http://dl-cdn.alpinelinux.org/alpine/v3.24/community" >> /etc/apk/repositories
+          apk update --no-cache
+          apk upgrade --no-cache
+          apk add --no-cache \
+          sudo bash zsh build-base gcc make pkgconf fontconfig fontconfig-dev \
+          git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr
+      - uses: actions/checkout@v4
       - name: Build and smoke test
         run: |
           chmod 755 * .* -R
           ./scripts/test.sh
-
       - name: Coverage build and report
         env:
           CC: gcc
         run: COVERAGE=1 ./scripts/test.sh
-
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
         uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build_test/junit.xml
-
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: build_test/coverage*.html
-
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
@@ -63,7 +64,7 @@ jobs:
           apk upgrade --no-cache
           apk add --no-cache \
           sudo bash zsh build-base gcc make pkgconf fontconfig fontconfig-dev \
-          git git-lfs nodejs npm lcov gzip libpng-dev curl
+          git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr
       - uses: actions/checkout@v4
       - name: Build and smoke test
         run: |
@@ -83,7 +84,7 @@ jobs:
           apk upgrade --no-cache
           apk add --no-cache \
           sudo bash zsh build-base gcc make pkgconf fontconfig fontconfig-dev \
-          git git-lfs nodejs npm lcov gzip libpng-dev curl
+          git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr
       - uses: actions/checkout@v4
       - name: Build and smoke test
         run: |
@@ -103,7 +104,7 @@ jobs:
           apk upgrade --no-cache
           apk add --no-cache \
           sudo bash zsh build-base gcc make pkgconf fontconfig fontconfig-dev \
-          git git-lfs nodejs npm lcov gzip libpng-dev curl
+          git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr
       - uses: actions/checkout@v4
       - name: Build and smoke test
         run: |
@@ -123,7 +124,7 @@ jobs:
           apk upgrade --no-cache
           apk add --no-cache \
           sudo bash zsh build-base gcc make pkgconf fontconfig fontconfig-dev \
-          git git-lfs nodejs npm lcov gzip libpng-dev curl
+          git git-lfs nodejs npm lcov gzip libpng-dev curl gcovr
       - uses: actions/checkout@v4
       - name: Build and smoke test
         run: |

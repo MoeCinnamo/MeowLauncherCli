@@ -4,7 +4,7 @@
 <a href="https://codecov.io/gh/MoeCinnamo/MeowLauncherCli"><img alt="Codecov" src="https://img.shields.io/codecov/c/github/MoeCinnamo/MeowLauncherCli?style=flat-square"></a>
 <a href="https://github.com/MoeCinnamo/MeowLauncherCli/blob/master/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/MoeCinnamo/MeowLauncherCli?style=flat-square"></a>
 
-[繁體中文](README-zh_TW.md) [English](README.md) [日本語](README-ja_JP.md)
+[繁體中文 (台湾)](README-zh_TW.md) [English](README.md) [繁體中文 (香港)](README-zh_HK.md) [日本語](README-ja_JP.md)
 
 > 一個中國式家長無從檢舉的 Minecraft 啟動器——因為它完全長在終端機裡，在那些「看見什麼都覺得在害小孩」的家長眼裡，你只是在認真寫程式。
 
@@ -66,7 +66,8 @@ Windows（MSYS2/MinGW）下同一支腳本使用 `gcc`，產出 `meowlaunchcli.e
 ## 文件
 
 - [English](docs/en/index.md)
-- [繁體中文](docs/zh-TW/index.md)
+- [繁體中文 (台湾)](docs/zh-TW/index.md)
+- [繁體中文 (香港)](docs/zh-HK/index.md)
 - [日本語](docs/ja-JP/index.md)
 
 ## 安全性

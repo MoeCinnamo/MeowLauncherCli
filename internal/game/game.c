@@ -83,7 +83,7 @@ int Game_Show(void)
     char ex[1024];
     if (exedir(ex, sizeof ex) != 0) return 1;
 #ifdef _WIN32
-    char pattern[1200];
+    char pattern[4096];
     snprintf(pattern, sizeof pattern, "%s\\.minecraft\\versions\\*", ex);
     WIN32_FIND_DATAA fd;
     HANDLE h = FindFirstFileA(pattern, &fd);
@@ -99,7 +99,7 @@ int Game_Show(void)
     } while (FindNextFileA(h, &fd));
     FindClose(h);
 #else
-    char dir[1024];
+    char dir[4096];
     snprintf(dir, sizeof dir, "%s/.minecraft/versions", ex);
     DIR *d = opendir(dir);
     if (d == NULL) {
@@ -109,7 +109,7 @@ int Game_Show(void)
     struct dirent *e;
     while ((e = readdir(d)) != NULL) {
         if (e->d_name[0] == '.') continue;
-        char full[1200];
+        char full[8192];
         snprintf(full, sizeof full, "%s/%s", dir, e->d_name);
         struct stat st;
         if (stat(full, &st) == 0 && S_ISDIR(st.st_mode)) {

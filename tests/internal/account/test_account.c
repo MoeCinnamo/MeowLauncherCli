@@ -41,5 +41,22 @@ int main(void)
 
     CHECK(Account_Local_Show() == 0, "account local show runs");
 
+    /* Missing users.json: Account_Local_Show prints (none). */
+    remove("build_test/.meowlaunch/data/users.json");
+    CHECK(Account_Local_Show() == 0, "show with no users.json");
+
+    /* Read-only data dir: usersfile_save fails. */
+#ifdef _WIN32
+    system("attrib +r build_test\\.meowlaunch\\data >nul 2>&1");
+#else
+    chmod("build_test/.meowlaunch/data", 0o555);
+#endif
+    CHECK(Account_Local_Add("readonly") != 0, "add to read-only dir fails");
+#ifdef _WIN32
+    system("attrib -r build_test\\.meowlaunch\\data >nul 2>&1");
+#else
+    chmod("build_test/.meowlaunch/data", 0o755);
+#endif
+
     return failures ? 1 : 0;
 }

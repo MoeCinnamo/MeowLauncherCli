@@ -30,8 +30,11 @@ test_dir="$PROJECT_ROOT/build_test"
 mkdir -p "$test_dir"
 
 CC="${CC:-gcc}"
-CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L -D_DEFAULT_SOURCE -I.}"
-[ "${COVERAGE:-0}" = "1" ] && CFLAGS="$CFLAGS --coverage"
+CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L -I.}"
+echo "[INFO] Compiler: $CC"
+if [ "${COVERAGE:-0}" = "1" ]; then
+    CFLAGS="$CFLAGS --coverage"
+fi
 GIT_VERSION="${GIT_VERSION:-$(git rev-parse HEAD 2>/dev/null || echo unknown)}"
 CFLAGS="$CFLAGS -DGIT_VERSION=\"$GIT_VERSION\""
 
@@ -169,8 +172,11 @@ rebuild ""
 if [ -z "${CC:-}" ]; then
     if command -v gcc >/dev/null 2>&1; then CC="gcc"; else CC="cc"; fi
 fi
-CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L -D_DEFAULT_SOURCE -I.}"
-[ "${COVERAGE:-0}" = "1" ] && CFLAGS="$CFLAGS --coverage"
+CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L -I.}"
+if [ "${COVERAGE:-0}" = "1" ]; then
+    CFLAGS="$CFLAGS --coverage"
+fi
+echo "[INFO] Compiler: $CC"
 GIT_VERSION="${GIT_VERSION:-$(git rev-parse HEAD 2>/dev/null || echo unknown)}"
 CFLAGS="$CFLAGS -DGIT_VERSION=\"$GIT_VERSION\""
 for test_src in $(find tests -name 'test_*.c'); do
@@ -236,7 +242,9 @@ if [ "${COVERAGE:-0}" = "1" ]; then
             -o "$test_dir/coverage.xml" "$test_dir"
         echo "[INFO] Coverage report: $test_dir/coverage.html"
     else
-        echo "[WARN] gcovr not found; .gcda data left in $test_dir"
+        echo "[WARN] gcovr not found; using gcov directly"
+        (cd "$test_dir" && gcov --preserve-paths *.gcno 2>/dev/null) || true
+        echo "[INFO] gcov output: $test_dir/*.gcov"
     fi
 fi
 

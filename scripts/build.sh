@@ -50,7 +50,8 @@ case "$uname_s" in
         LDFLAGS="${LDFLAGS:-}"
         ;;
 esac
-CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L -D_DEFAULT_SOURCE -I.}"
+CFLAGS="${CFLAGS:--std=c11 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L -I.}"
+echo "[INFO] Compiler: $CC"
 
 # Git build identifier embedded into the "version" subcommand: the full
 # commit hash (e.g. aca57ce8859ca4faa5d31f079e370108832d640d).
@@ -86,7 +87,7 @@ wanted=("${ordered[@]}")
     echo "static const struct { const char *prefix; const char *json; } builtin_langs[] = {"
     for src in "${wanted[@]}"; do
         name="$(basename "$src" .json)"
-        prefix="${name%%-*}"
+        prefix="${name//-/_}"
         if [ "$name" = "en" ]; then
             prefix_c="NULL"
         else

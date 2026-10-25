@@ -2,6 +2,24 @@
 
 Newest record on top.
 
+## 2026-10-25 strict locale, CRLF→LF, CC env override
+
+- **Reason**: Windows mojibake with non-UTF-8 locales; need LF on commit;
+  user wants CC env override for musl/mingw/clang; coverage report output.
+- **Decisions**:
+  - i18n: require UTF-8 encoding in `$LANG`; prefix stored as full locale tag
+    (`zh_TW`, `ja_JP`) not just `zh`, so `zh_CN` falls back to English;
+    non-UTF-8 also falls back.
+  - `.gitattributes`: `* text=auto eol=lf`, `*.sh`/`scripts/*` executable.
+  - build.sh/test.sh respect `CC` env var; print `[INFO] Compiler: $CC`;
+    defaults: musl-gcc on Linux (static), gcc on Alpine/MinGW.
+  - `strcasestr` implemented locally when `__GLIBC__` is not defined.
+  - test.sh coverage: `--coverage` flag + gcovr HTML/XML report; falls back
+    to `gcov` directly when gcovr is missing.
+  - test_account/test_game cover missing users.json / missing versions dir.
+  - Added `lang/zh-HK.json`, `README-zh_HK.md`, `docs/zh-HK/`.
+- **Trade-off**: Not glibc-compatible by design.
+
 ## 2026-10-25 coverage: game help, game show dirs, main.c dispatch
 
 - **Reason**: Raise code coverage on `internal/game/help.c`,
